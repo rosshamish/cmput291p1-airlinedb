@@ -18,10 +18,11 @@ public class AirlineDB {
 
     private Credentials dbCreds;
 
-    public AirlineDB(Credentials dbCreds) {
+    public AirlineDB(Credentials dbCreds) throws SQLInvalidAuthorizationSpecException {
         this.dbCreds = dbCreds;
         if (!this.connect()) {
-            System.err.println("AirlineDB failed to initialize");
+            System.err.println("AirlineDB failed to connect to database");
+            throw new SQLInvalidAuthorizationSpecException();
         }
     }
 

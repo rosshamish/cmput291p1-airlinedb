@@ -1,66 +1,76 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.SQLInvalidAuthorizationSpecException;
 
 /**
  * Created by ross on 15-10-21.
  */
 public class AirlineDBConsole {
     private AirlineDBController controller;
-    private final String[] loginOptions = {"Login", "Register"};
+    private AirlineDBCommandLineInterface cli;
+
+    private Boolean isAgent = false;
+    private Boolean isLoggedIn = false;
     private Boolean userWantsExit = false;
 
-    private Boolean tryingToLogin = false;
-    private Boolean loggedIn = false;
+    public AirlineDBConsole() {
+        controller = new AirlineDBController();
+        cli = new AirlineDBCommandLineInterface();
+    }
 
     public void run() {
         System.out.println("Welcome to AirlineDB\n");
 
-        connect();
+        try {
+            connect();
+        } catch (SQLInvalidAuthorizationSpecException e) {
+            System.err.println("AirlineDBConsole failed to connect to database");
+            System.exit(0);
+        }
         while (!userWantsExit) {
             // Login
-            tryingToLogin = true;
-            while (tryingToLogin) {
-                loggedIn = login();
-                if (!loggedIn) {
-                    tryingToLogin = askQuestion("Re-try login?");
-                }
+            while (!isLoggedIn && !userWantsExit) {
+                isLoggedIn = login();
             }
-            if (!loggedIn) {
+            if (userWantsExit) {
                 break;
             }
 
             // Pick action
-            
+            mainMenu();
+            if (userWantsExit) {
+                break;
+            }
         }
-        System.out.println("Bye!");
         disconnect();
+
+        System.out.println("Thanks for choosing AirlineDB");
     }
 
     private void disconnect() {
         controller.disconnect();
     }
 
-    private void connect() {
-        Credentials dbCreds = getCredentials("Please enter your Oracle database credentials");
-        controller.connect(dbCreds);
-        System.out.println("...connected");
+    private void connect() throws SQLInvalidAuthorizationSpecException {
+        Credentials dbCreds = cli.inputCredentials("Please enter your Oracle database credentials");
+        try {
+            controller.connect(dbCreds);
+            System.out.println("...connected");
+        } catch (SQLInvalidAuthorizationSpecException e) {
+            throw e;
+        }
     }
 
     /*
      * @return True is user is logged in, False otherwise
      */
     private Boolean login() {
-        String choice = loginOptions[getChoice(loginOptions)];
         Boolean wasLoginSuccessful = false;
+
+        Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Login);
         switch (choice) {
-            case "Login":
-                Credentials loginCreds = getCredentials("Please enter your airline credentials");
+            case 0: // Login
+                Credentials loginCreds = cli.inputCredentials("Please enter your AirlineDB credentials");
                 controller.login(loginCreds);
                 if (controller.isUserLoggedIn(loginCreds)) {
                     wasLoginSuccessful = true;
@@ -68,8 +78,8 @@ public class AirlineDBConsole {
                     System.out.println("Invalid credentials");
                 }
                 break;
-            case "Register":
-                UserDetails newUserDetails = getUserDetails("Create your airline account");
+            case 1: // Register
+                UserDetails newUserDetails = cli.inputUserDetails("Create your AirlineDB account");
                 controller.register(newUserDetails);
                 controller.login(newUserDetails.getCreds());
                 if (controller.isUserLoggedIn(newUserDetails.getCreds())) {
@@ -78,72 +88,88 @@ public class AirlineDBConsole {
                     System.out.println("Registration failed");
                 }
                 break;
+            case 2: // Exit
+                userWantsExit = true;
+                break;
         }
         return wasLoginSuccessful;
     }
 
-    private UserDetails getUserDetails(String title) {
-        UserDetails details = new UserDetails();
-
-        details.setCreds(getCredentials(title));
-        details.setName(readLine("Name: "));
-        details.setEmail(readLine("Email: "));
-
-        return details;
+    private void mainMenu() {
+        if (isAgent) {
+            Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.AgentMain);
+            switch (choice) {
+                case 0: // Search
+                    searchForFlights();
+                    break;
+                case 1: // List Bookings
+                    listBookings();
+                    break;
+                case 2: // Cancel Booking
+                    cancelBooking();
+                    break;
+                case 3: // Record Departure
+                    recordDeparture();
+                    break;
+                case 4: // Record Arrival
+                    recordArrival();
+                    break;
+                case 5: // Logout
+                    logout();
+                    break;
+            }
+        } else {
+            Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Main);
+            switch (choice) {
+                case 0: // Search
+                    searchForFlights();
+                    break;
+                case 1: // List Bookings
+                    listBookings();
+                    break;
+                case 2: // Cancel Booking
+                    cancelBooking();
+                    break;
+                case 3: // Logout
+                    logout();
+                    break;
+            }
+        }
     }
 
-    // @return index in options of the user's choice
-    private Integer getChoice(String[] options) {
-        Integer choice = null;
-
-        Integer optNum = 1;
-        for (String opt : options) {
-            System.out.printf("%d) %s\n", optNum++, opt);
-        }
-
-        choice = Integer.valueOf(this.readLine("Selection>> ")) - 1;
-        if (choice < 0 || choice > options.length) {
-            System.err.println("Invalid option chosen");
-        }
-
-        return choice;
+    private void recordDeparture() {
+        // TODO
+        System.out.println("WOW TURNIPS SURE ARE DELICIOUS");
+        mainMenu();
     }
 
-    private Boolean askQuestion(String question) {
-        String ans = readLine(question + " (y/n) [y]");
-        return (ans == "") || (ans == "y") || (ans == "Y");
+    private void recordArrival() {
+        // TODO
+        System.out.println("MAN SURE WISH THIS SOFTWARE WORKED AND DIDNT PRINT RANDOM MESSAGES");
+        mainMenu();
     }
 
-    private Credentials getCredentials(String question) {
-        Credentials creds = new Credentials();
-        if (question.length() > 0) {
-            System.out.println(question);
-        }
-        creds.setUser(this.readLine("Username: "));
-        creds.setPass(this.readPassword("Password: "));
-        return creds;
+    private void searchForFlights() {
+        // TODO
+        System.out.println("WOW THESE WERE EXCITING FLIGHTS TO CHOOSE FROM");
+        mainMenu();
     }
 
-    private CredentialsDetail getCredentialsDetail
-
-    private String readLine(String format, Object... args) {
-        if (System.console() != null) {
-            return System.console().readLine(format, args);
-        }
-        System.out.print(String.format(format, args));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                System.in));
-        try {
-            return reader.readLine();
-        } catch (IOException e) {
-            System.err.printf("readLine IOException: %s", e.getMessage());
-        }
-        return "NULL";
+    private void listBookings() {
+        // TODO
+        System.out.println("LOOK AT ALL THESE FANTASTIC BOOKINGS");
+        mainMenu();
     }
 
-    private char[] readPassword(String format, Object... args) {
-        if (System.console() != null)
-            return System.console().readPassword(format, args);
-        return this.readLine(format, args).toCharArray();
+    private void cancelBooking() {
+        // TODO
+        System.out.println("WHOOPS DELETED ALL YOUR BOOKINGS");
+        mainMenu();
+    }
+
+    private void logout() {
+        isAgent = false;
+        isLoggedIn = controller.logout();
+        System.out.println("Logged out.");
     }
 }
