@@ -8,3 +8,6 @@ Attribution:
 
 Read file into String in Java
 - http://stackoverflow.com/a/326440/1817465
+
+Enum of Strings in Java
+- http://stackoverflow.com/a/3978690/1817465
