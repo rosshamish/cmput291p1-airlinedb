@@ -25,6 +25,28 @@ public class AirlineDB {
         }
     }
 
+    private Boolean connect() {
+        try {
+            drvClass = Class.forName(db_driverName);
+            connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPassString());
+        } catch (ClassNotFoundException e) {
+            System.err.printf("Oracle driver ClassNotFoundException: %s\n", e.getMessage());
+            return false;
+        } catch (SQLException e) {
+            System.err.printf("On connect, SQLException: %s\n", e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public void disconnect() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            System.err.printf("On disconnect, SQLException: %s\n", e.getMessage());
+        }
+    }
+
     public ResultSet executeQuery(String query) {
         ResultSet resultSet = null;
         try {
@@ -56,20 +78,6 @@ public class AirlineDB {
 
     public void executeUpdateFromFile(String updateFilename) {
         executeUpdate(readFileIntoString(updateFilename));
-    }
-
-    private Boolean connect() {
-        try {
-            drvClass = Class.forName(db_driverName);
-            connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPassString());
-        } catch (ClassNotFoundException e) {
-            System.err.printf("Oracle driver ClassNotFoundException: %s\n", e.getMessage());
-            return false;
-        } catch (SQLException e) {
-            System.err.printf("SQLException: %s\n", e.getMessage());
-            return false;
-        }
-        return true;
     }
 
     private String readFileIntoString(String filename) {
