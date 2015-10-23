@@ -11,7 +11,11 @@ import java.util.ArrayList;
  */
 public class AirlineDBConsole {
     private AirlineDB airlineDB;
-    private final String[] loginOptions = {"Login", "Register"};
+    private Boolean isAgent = false;
+    private final String[] loginOptions = {"Login", "Register", "Exit"};
+    private final String[] mainMenuOptions = {"Search for Flight", "List Bookings", "Cancel Bookings", "Logout"};
+    private final String[] mainMenuOptionsAgent = {"Search for Flight", "List Bookings", "Cancel Bookings",
+            "Record Flight Departure", "Record Flight Arrival", "Logout"};
 
     public void run() {
         connect();
@@ -26,15 +30,139 @@ public class AirlineDBConsole {
     }
 
     private void presentLoginPrompt() {
-        String choice = loginOptions[getChoice(loginOptions)];
+        Integer choice = getChoice(loginOptions);
         switch (choice) {
-            case "Login":
-                // TODO log an existing user in
+            case 0:
+                login();
                 break;
-            case "Register":
-                // TODO register a new user
+            case 1:
+                createAccount();
                 break;
+            case 2:
+                System.exit(0);
         }
+    }
+
+    private void presentMainMenuPrompt() {
+        if (isAgent) {
+            Integer choice = getChoice(mainMenuOptionsAgent);
+            switch (choice) {
+                case 0:
+                    searchForFlights();
+                    break;
+                case 1:
+                    listBookings();
+                    break;
+                case 2:
+                    cancelBooking();
+                    break;
+                case 3:
+                    recordDeparture();
+                    break;
+                case 4:
+                    recordArrival();
+                    break;
+                case 5:
+                    logout();
+                    break;
+            }
+        }
+        else {
+            Integer choice = getChoice(mainMenuOptions);
+            switch (choice) {
+                case 0:
+                    searchForFlights();
+                    break;
+                case 1:
+                    listBookings();
+                    break;
+                case 2:
+                    cancelBooking();
+                    break;
+                case 3:
+                    logout();
+                    break;
+            }
+        }
+    }
+
+    private void recordDeparture() {
+        // TODO
+        System.out.println("WOW TURNIPS SURE ARE DELICIOUS");
+        presentMainMenuPrompt();
+    }
+
+    private void recordArrival() {
+        // TODO
+        System.out.println("MAN SURE WISH THIS SOFTWARE WORKED AND DIDNT PRINT RANDOM MESSAGES");
+        presentMainMenuPrompt();
+    }
+
+    private void searchForFlights() {
+        // TODO
+        System.out.println("WOW THESE WERE EXCITING FLIGHTS TO CHOOSE FROM");
+        presentMainMenuPrompt();
+    }
+
+    private void listBookings() {
+        // TODO
+        System.out.println("LOOK AT ALL THESE FANTASTIC BOOKINGS");
+        presentMainMenuPrompt();
+    }
+
+    private void cancelBooking() {
+        // TODO
+        System.out.println("WHOOPS DELETED ALL YOUR BOOKINGS");
+        presentMainMenuPrompt();
+    }
+
+    private void createAccount() {
+        try {
+            String username = this.readLine("Username: ");
+            char[] password = this.readPassword("Password: ");
+            if (canCreateAccount(username, password)) {
+                System.out.println("Account created.");
+                presentMainMenuPrompt();
+            } else {
+                System.out.println("Username and password combination already exist.");
+                presentLoginPrompt();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean canCreateAccount(String username, char[] password) {
+        // TODO IMPLEMENT CREATING USER
+        return true;
+    }
+
+    private void login() {
+        try {
+            String username = this.readLine("Username: ");
+            char[] password = this.readPassword("Password: ");
+            if (canLogin(username, password)) {
+                System.out.println("Logged In.");
+                presentMainMenuPrompt();
+            } else {
+                System.out.println("Username and password combination do not exist.");
+                presentLoginPrompt();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private boolean canLogin(String username, char[] password) {
+        // TODO IMPLEMENT LOGIN CHECK, SET GLOBAL TO TYPE OF USER IF AGENT OR NOT
+        isAgent = true;
+        return true;
+    }
+
+    private void logout() {
+        // TODO ACTUALLY LOG SOMEONE OUT
+        isAgent = false;
+        System.out.println("Logged out.");
+        presentLoginPrompt();
     }
 
     // @return index in options of the user's choice
