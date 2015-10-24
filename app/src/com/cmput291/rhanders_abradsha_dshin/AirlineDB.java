@@ -1,6 +1,7 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import java.io.File;
+import oracle.jdbc.driver.OracleDriver;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -12,8 +13,6 @@ import java.sql.*;
  */
 public class AirlineDB {
     private final String db_url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-    private final String db_driverName = "oracle.jdbc.driver.OracleDriver";
-    private Class drvClass;
     private Connection connection;
 
     private Credentials dbCreds;
@@ -28,11 +27,9 @@ public class AirlineDB {
 
     private Boolean connect() {
         try {
-            drvClass = Class.forName(db_driverName);
-            connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPassString());
-        } catch (ClassNotFoundException e) {
-            System.err.printf("Oracle driver ClassNotFoundException: %s\n", e.getMessage());
-            return false;
+            Driver driver = new OracleDriver();
+            DriverManager.registerDriver(driver);
+            connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPass());
         } catch (SQLException e) {
             System.err.printf("On connect, SQLException: %s\n", e.getMessage());
             return false;
