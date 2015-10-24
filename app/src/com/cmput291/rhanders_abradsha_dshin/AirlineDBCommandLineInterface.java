@@ -34,7 +34,7 @@ public class AirlineDBCommandLineInterface {
             System.out.printf("%d) %s\n", optNum++, opt);
         }
 
-        choice = Integer.valueOf(this.readLine("Selection>> ")) - 1;
+        choice = Integer.valueOf(this.readLine(">> ")) - 1;
         if (choice < 0 || choice > prompts.get(name).length) {
             System.err.println("Invalid option chosen");
         }

@@ -15,12 +15,8 @@ public class Credentials {
         this.user = user;
     }
 
-    public char[] getPass() {
-        return pass;
-    }
-
-    public String getPassString() {
-        return pass.toString();
+    public String getPass() {
+        return String.valueOf(pass);
     }
 
     public void setPass(char[] pass) {
