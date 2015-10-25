@@ -5,6 +5,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException;
+import java.util.ArrayList;
 
 /**
  * Created by ross on 15-10-23.
@@ -55,13 +56,18 @@ public class AirlineDBController {
     public void register(UserDetails newUserDetails) {
         String email = newUserDetails.getEmail();
         String pass = newUserDetails.getPass();
-
-        String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null);";  // TODO: add to SQLQueries
-        airlineDB.executeUpdate(update);
+        airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
     }
 
-    public void recordArrival() {
-        throw new NotImplementedException();
+    public ArrayList<ScheduledFlight> recordArrival() {
+        ArrayList<ScheduledFlight> flights = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
+        try {
+            while(results.next()) {
+                flights.add(new ScheduledFlight(results));
+            }
+        } catch (SQLException e) {}
+        return flights;
     }
 
     public void recordDeparture() {

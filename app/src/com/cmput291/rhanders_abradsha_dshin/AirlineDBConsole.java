@@ -138,14 +138,12 @@ public class AirlineDBConsole {
     }
 
     private void recordDeparture() {
-        // TODO
-        controller.recordDeparture();
+        //cli.printObjectRows(controller.recordDeparture());
         mainMenu();
     }
 
     private void recordArrival() {
-        // TODO
-        controller.recordArrival();
+        cli.printObjectRows(controller.recordArrival());
         mainMenu();
     }
 
