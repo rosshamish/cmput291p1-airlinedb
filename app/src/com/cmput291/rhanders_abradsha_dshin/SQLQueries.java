@@ -5,25 +5,25 @@ package com.cmput291.rhanders_abradsha_dshin;
 public class SQLQueries {
 
     public static String userBookingsQuery(String email) {
-        return "SELECT * FROM tickets, bookings WHERE tickets.tno = bookings.tno and tickets.email = '" + email + "';";
+        return "SELECT * FROM tickets, bookings WHERE tickets.tno = bookings.tno and tickets.email = '" + email + "'";
     }
 
-    public static String cancelBookingUpdate(String ticketNo) {
+    public static String cancelBookingUpdate(String ticketNo, String flightNo, String depDate) {
         return "";
     }
 
     public static String departureUpdate(String time, String flightNo, String depDate){
         return "UPDATE sch_flights SET act_dep_time = '" + time +
-                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "';";
+                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "'";
     }
 
     public static String arrivalUpdate(String time, String flightNo, String depDate){
         return "UPDATE sch_flights SET act_arr_time = '" + time +
-                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "';";
+                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "'";
     }
 
     public static String lastLoginUpdate(String email){
-        return "UPDATE users SET last_login = sysdate WHERE email = '" + email + "';";
+        return "UPDATE users SET last_login = sysdate WHERE email = '" + email + "'";
     }
 
     public static String loginU(String email, String pass){
@@ -34,7 +34,17 @@ public class SQLQueries {
         return "SELECT email FROM airline_agents WHERE email ='" + email + "'";
     }
 
-    public static String checkusr(String email){
+    public static String checkusr(String email) {
         return "SELECT email FROM users WHERE email ='" + email + "'";
+    }
+
+
+    public static String allScheduledFlights() {
+        return "SELECT * FROM sch_flights";
+    }
+
+    public static String userUpdate(String email, String pass) {
+        return "INSERT INTO users VALUES('" + email + "','" + pass + "', null)";
+
     }
 }

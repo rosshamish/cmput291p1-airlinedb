@@ -3,7 +3,9 @@ package com.cmput291.rhanders_abradsha_dshin;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ross on 15-10-23.
@@ -12,14 +14,16 @@ public class AirlineDBCommandLineInterface {
     public enum PromptName {
         Login,
         Main,
-        AgentMain
+        AgentMain,
+        Bookings
     }
 
     private static final HashMap<PromptName, String[]> prompts = new HashMap<PromptName, String[]>() {{
         put(PromptName.Login, new String[]{"Login", "Register", "Exit"});
-        put(PromptName.Main, new String[]{"Search for Flight", "List Bookings", "Cancel Bookings", "Logout"});
-        put(PromptName.AgentMain, new String[]{"Search for Flight", "List Bookings", "Cancel Bookings",
+        put(PromptName.Main, new String[]{"Search for Flight", "List Bookings", "Logout"});
+        put(PromptName.AgentMain, new String[]{"Search for Flight", "List Bookings",
                 "Record Flight Departure", "Record Flight Arrival", "Logout"});
+        put(PromptName.Bookings, new String[]{"Details", "Delete", "Return to Menu"});
     }};
 
     public Integer promptForChoice(PromptName name) {
@@ -42,19 +46,19 @@ public class AirlineDBCommandLineInterface {
         return choice;
     }
 
-    public Object printObjectRows(Object[] objects) {
+    public Object printObjectRows(ArrayList<?> objects, String clarification) {
         Integer choice = null;
         Integer optNum = 1;
         for (Object opt : objects) {
             System.out.printf("%d) %s\n", optNum++, opt.toString());
         }
 
-        choice = Integer.valueOf(this.readLine(">> ")) - 1;
-        if (choice < 0 || choice > objects.length) {
+        choice = Integer.valueOf(this.readLine(clarification + ">> ")) - 1;
+        if (choice < 0 || choice > objects.size()) {
             System.err.println("Invalid option chosen");
         }
 
-        return objects[choice];
+        return objects.get(choice);
     }
 
     public UserDetails inputUserDetails(String title) {

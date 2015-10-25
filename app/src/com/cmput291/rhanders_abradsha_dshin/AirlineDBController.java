@@ -5,6 +5,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException;
+import java.util.ArrayList;
 
 /**
  * Created by ross on 15-10-23.
@@ -60,19 +61,43 @@ public class AirlineDBController {
     public void register(UserDetails newUserDetails) {
         String email = newUserDetails.getEmail();
         String pass = newUserDetails.getPass();
-        String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null)";  // TODO: add to SQLQueries
+
         ResultSet usrresults = airlineDB.executeQuery(SQLQueries.checkusr(email));
         try {
             if (usrresults.next()){
                 System.out.println("This email has already been registered");
             }
         }catch (SQLException e){}
-        airlineDB.executeUpdate(update);
+
+        airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
+    }
+
+    public ArrayList<ScheduledFlight> recordArrival() {
+        ArrayList<ScheduledFlight> flights = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
+        try {
+            while(results.next()) {
+                flights.add(new ScheduledFlight(results));
+            }
+        } catch (SQLException e) {}
+        return flights;
 
     }
 
-    public void recordArrival() {
-        throw new NotImplementedException();
+    public ArrayList<SimpleBooking> listBookings() {
+        ArrayList<SimpleBooking> bookings = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.userBookingsQuery(currentUser.getEmail()));
+        try {
+            while(results.next()) {
+                bookings.add(new SimpleBooking(results));
+            }
+        } catch (SQLException e) {}
+        return bookings;
+    }
+
+    public void deleteBooking(SimpleBooking booking) {
+        airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
+                booking.getFlightNo(), booking.getDepDate()));
     }
 
     public void recordDeparture() {
