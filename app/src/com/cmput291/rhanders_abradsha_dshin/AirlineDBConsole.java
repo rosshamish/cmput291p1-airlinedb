@@ -105,16 +105,13 @@ public class AirlineDBConsole {
                 case 1: // List Bookings
                     listBookings();
                     break;
-                case 2: // Cancel Booking
-                    cancelBooking();
-                    break;
-                case 3: // Record Departure
+                case 2: // Record Departure
                     recordDeparture();
                     break;
-                case 4: // Record Arrival
+                case 3: // Record Arrival
                     recordArrival();
                     break;
-                case 5: // Logout
+                case 4: // Logout
                     logout();
                     break;
             }
@@ -127,10 +124,7 @@ public class AirlineDBConsole {
                 case 1: // List Bookings
                     listBookings();
                     break;
-                case 2: // Cancel Booking
-                    cancelBooking();
-                    break;
-                case 3: // Logout
+                case 2: // Logout
                     logout();
                     break;
             }
@@ -143,8 +137,7 @@ public class AirlineDBConsole {
     }
 
     private void recordArrival() {
-        cli.printObjectRows(controller.recordArrival());
-        mainMenu();
+        cli.printObjectRows(controller.recordArrival(), "too many rows");
     }
 
     private void searchForFlights() {
@@ -160,8 +153,22 @@ public class AirlineDBConsole {
     private void makeBooking() {}
 
     private void listBookings() {
-        System.out.println("LOOK AT ALL THESE FANTASTIC BOOKINGS");
-        mainMenu();
+        System.out.println(SimpleBooking.rowDescription());
+        SimpleBooking booking = (SimpleBooking)cli.printObjectRows(controller.listBookings(), "Select booking to modify");
+        while(true) {
+            Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
+            switch (choice) {
+                case 0: // Booking Details
+                    System.out.println(booking.descriptiveToString());
+                    break;
+                case 1: // Delete Booking
+                    controller.deleteBooking(booking);
+                    System.out.println("Deleted.");
+                    return;
+                case 2: // Return
+                    return;
+            }
+        }
     }
 
     private void cancelBooking() {

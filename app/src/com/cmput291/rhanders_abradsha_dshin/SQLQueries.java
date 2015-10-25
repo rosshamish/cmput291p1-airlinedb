@@ -8,7 +8,7 @@ public class SQLQueries {
         return "SELECT * FROM tickets, bookings WHERE tickets.tno = bookings.tno and tickets.email = '" + email + "'";
     }
 
-    public static String cancelBookingUpdate(String ticketNo) {
+    public static String cancelBookingUpdate(String ticketNo, String flightNo, String depDate) {
         return "";
     }
 

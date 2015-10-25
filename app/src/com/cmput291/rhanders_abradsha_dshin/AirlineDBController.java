@@ -70,6 +70,22 @@ public class AirlineDBController {
         return flights;
     }
 
+    public ArrayList<SimpleBooking> listBookings() {
+        ArrayList<SimpleBooking> bookings = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.userBookingsQuery(currentUser.getEmail()));
+        try {
+            while(results.next()) {
+                bookings.add(new SimpleBooking(results));
+            }
+        } catch (SQLException e) {}
+        return bookings;
+    }
+
+    public void deleteBooking(SimpleBooking booking) {
+        airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
+                booking.getFlightNo(), booking.getDepDate()));
+    }
+
     public void recordDeparture() {
         throw new NotImplementedException();
     }

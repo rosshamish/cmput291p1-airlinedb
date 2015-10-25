@@ -19,7 +19,10 @@ public class ScheduledFlight {
         } catch (Exception e) {
             System.out.println("oops missed a row");
         }
+    }
 
+    public static String rowDescription() {
+        return "flightno\tdep_date\tact_dep_time\tact_arr_time";
     }
 
     @Override
