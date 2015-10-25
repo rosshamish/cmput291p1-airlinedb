@@ -9,7 +9,6 @@ public class AirlineDBConsole {
     private AirlineDBController controller;
     private AirlineDBCommandLineInterface cli;
 
-    private Boolean isAgent = false;
     private Boolean isLoggedIn = false;
     private Boolean userWantsExit = false;
 
@@ -74,6 +73,7 @@ public class AirlineDBConsole {
 
                 if (controller.isUserLoggedIn(details)) {
                     wasLoginSuccessful = true;
+                    controller.login(details);
                 } else {
                     System.out.println("Invalid credentials");
                 }
@@ -96,7 +96,7 @@ public class AirlineDBConsole {
     }
 
     private void mainMenu() {
-        if (isAgent) {
+        if (controller.isAgent()) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.AgentMain);
             switch (choice) {
                 case 0: // Search
@@ -139,13 +139,13 @@ public class AirlineDBConsole {
 
     private void recordDeparture() {
         // TODO
-        System.out.println("WOW TURNIPS SURE ARE DELICIOUS");
+        controller.recordDeparture();
         mainMenu();
     }
 
     private void recordArrival() {
         // TODO
-        System.out.println("MAN SURE WISH THIS SOFTWARE WORKED AND DIDNT PRINT RANDOM MESSAGES");
+        controller.recordArrival();
         mainMenu();
     }
 
@@ -162,7 +162,6 @@ public class AirlineDBConsole {
     private void makeBooking() {}
 
     private void listBookings() {
-        // TODO
         System.out.println("LOOK AT ALL THESE FANTASTIC BOOKINGS");
         mainMenu();
     }
@@ -174,8 +173,7 @@ public class AirlineDBConsole {
     }
 
     private void logout() {
-        isAgent = false;
-        isLoggedIn = controller.logout();
+        isLoggedIn = !controller.logout();
         System.out.println("Logged out.");
     }
 }

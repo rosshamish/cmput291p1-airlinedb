@@ -42,6 +42,21 @@ public class AirlineDBCommandLineInterface {
         return choice;
     }
 
+    public Object printObjectRows(Object[] objects) {
+        Integer choice = null;
+        Integer optNum = 1;
+        for (Object opt : objects) {
+            System.out.printf("%d) %s\n", optNum++, opt.toString());
+        }
+
+        choice = Integer.valueOf(this.readLine(">> ")) - 1;
+        if (choice < 0 || choice > objects.length) {
+            System.err.println("Invalid option chosen");
+        }
+
+        return objects[choice];
+    }
+
     public UserDetails inputUserDetails(String title) {
         UserDetails details = new UserDetails();
 

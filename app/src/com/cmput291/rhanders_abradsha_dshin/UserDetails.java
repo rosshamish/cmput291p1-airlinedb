@@ -8,6 +8,7 @@ import java.util.Date;
 public class UserDetails {
     private char[] pass;
     private String email;
+    private Boolean agent;
 
     public String getEmail() {
         return email;
@@ -24,4 +25,8 @@ public class UserDetails {
     public void setPass(char[] pass) {
         this.pass = pass;
     }
+
+    public Boolean getAgent() { return agent; }
+
+    public void setAgent(Boolean agent) { this.agent = agent; }
 }

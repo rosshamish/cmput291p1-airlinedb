@@ -11,6 +11,7 @@ import java.sql.SQLInvalidAuthorizationSpecException;
  */
 public class AirlineDBController {
     private AirlineDB airlineDB;
+    private UserDetails currentUser;
 
     public void connect(Credentials dbCreds) throws SQLInvalidAuthorizationSpecException {
         try {
@@ -25,16 +26,16 @@ public class AirlineDBController {
         airlineDB.disconnect();
     }
 
-    public Boolean logout() {
-        throw new NotImplementedException();
+    public boolean logout() {
+        airlineDB.executeUpdate(SQLQueries.lastLoginUpdate(currentUser.getEmail()));
+        currentUser = null;
+        return true;
     }
 
     public boolean isUserLoggedIn(UserDetails details) {
         String email = details.getEmail();
         String pass = details.getPass();
-
-        String query = "SELECT email, pass FROM users WHERE email =" + email + "AND pass =" + pass + ';';
-        ResultSet results = airlineDB.executeQuery(query);
+        ResultSet results = airlineDB.executeQuery(SQLQueries.login(email, pass));
         try {
             if (!results.next()) {
                 return false;
@@ -43,7 +44,13 @@ public class AirlineDBController {
         return true;
     }
 
+    public void login(UserDetails details) {
+        currentUser = details;
+    }
 
+    public Boolean isAgent() {
+        return currentUser.getAgent();
+    }
 
     public void register(UserDetails newUserDetails) {
         String email = newUserDetails.getEmail();
@@ -51,5 +58,13 @@ public class AirlineDBController {
 
         String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null);";  // TODO: add to SQLQueries
         airlineDB.executeUpdate(update);
+    }
+
+    public void recordArrival() {
+        throw new NotImplementedException();
+    }
+
+    public void recordDeparture() {
+        throw new NotImplementedException();
     }
 }
