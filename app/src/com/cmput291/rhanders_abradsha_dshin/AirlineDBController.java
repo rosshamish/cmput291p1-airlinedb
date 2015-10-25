@@ -35,11 +35,16 @@ public class AirlineDBController {
     public boolean isUserLoggedIn(UserDetails details) {
         String email = details.getEmail();
         String pass = details.getPass();
-        ResultSet results = airlineDB.executeQuery(SQLQueries.login(email, pass));
+        details.setAgent(false);
+        ResultSet uresults = airlineDB.executeQuery(SQLQueries.loginU(email, pass));
+        ResultSet aresults = airlineDB.executeQuery(SQLQueries.loginA(email));
+
         try {
-            if (!results.next()) {
+            if (!uresults.next()) {
                 return false;
             }
+            if(uresults.next() && aresults.next()){
+                details.setAgent(true);            }
         } catch (SQLException e) {}                   //TODO: not sure if this is alright
         return true;
     }
@@ -55,9 +60,15 @@ public class AirlineDBController {
     public void register(UserDetails newUserDetails) {
         String email = newUserDetails.getEmail();
         String pass = newUserDetails.getPass();
-
-        String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null);";  // TODO: add to SQLQueries
+        String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null)";  // TODO: add to SQLQueries
+        ResultSet usrresults = airlineDB.executeQuery(SQLQueries.checkusr(email));
+        try {
+            if (usrresults.next()){
+                System.out.println("This email has already been registered");
+            }
+        }catch (SQLException e){}
         airlineDB.executeUpdate(update);
+
     }
 
     public void recordArrival() {
