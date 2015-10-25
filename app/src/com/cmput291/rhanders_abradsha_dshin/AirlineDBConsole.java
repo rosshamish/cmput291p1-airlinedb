@@ -150,10 +150,16 @@ public class AirlineDBConsole {
     }
 
     private void searchForFlights() {
-        // TODO
-        System.out.println("WOW THESE WERE EXCITING FLIGHTS TO CHOOSE FROM");
-        mainMenu();
+        UserSearch search = cli.inputsearch("Please enter search criteria");
+
+        String src = search.getSrc();
+        String dst = search.getDst();
+        String dep = search.getDepdate();
+
+
     }
+
+    private void makeBooking() {}
 
     private void listBookings() {
         // TODO

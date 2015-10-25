@@ -45,10 +45,28 @@ public class AirlineDBCommandLineInterface {
     public UserDetails inputUserDetails(String title) {
         UserDetails details = new UserDetails();
 
+        if (title.length() > 0) {
+            System.out.println(title);
+        }
+
         details.setEmail(this.readLine("Email: "));
         details.setPass(this.readPassword("Password: "));
 
         return details;
+    }
+
+    public UserSearch inputsearch(String title) {
+        UserSearch search = new UserSearch();
+
+        if (title.length() > 0) {
+            System.out.println(title);
+        }
+
+        search.setSrc(this.readLine("Source Airport: "));
+        search.setDst(this.readLine("Destination Airport: "));
+        search.setDepdate(this.readLine("Departure Date: "));
+
+        return search;
     }
 
     public Credentials inputCredentials(String title) {
