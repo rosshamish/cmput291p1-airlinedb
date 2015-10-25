@@ -37,7 +37,7 @@ public class AirlineDB {
         return true;
     }
 
-    public void disconnect() {
+    public void disconnect() {         // TODO: add a last login date to users table
         try {
             connection.close();
         } catch (SQLException e) {

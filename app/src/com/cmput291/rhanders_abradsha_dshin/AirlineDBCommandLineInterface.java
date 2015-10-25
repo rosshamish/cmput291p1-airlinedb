@@ -45,9 +45,8 @@ public class AirlineDBCommandLineInterface {
     public UserDetails inputUserDetails(String title) {
         UserDetails details = new UserDetails();
 
-        details.setCreds(this.inputCredentials(title));
-        details.setName(this.readLine("Name: "));
         details.setEmail(this.readLine("Email: "));
+        details.setPass(this.readPassword("Password: "));
 
         return details;
     }

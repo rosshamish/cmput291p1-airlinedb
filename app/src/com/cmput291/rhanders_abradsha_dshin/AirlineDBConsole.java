@@ -70,9 +70,9 @@ public class AirlineDBConsole {
         Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Login);
         switch (choice) {
             case 0: // Login
-                Credentials loginCreds = cli.inputCredentials("Please enter your AirlineDB credentials");
-                controller.login(loginCreds);
-                if (controller.isUserLoggedIn(loginCreds)) {
+                UserDetails details = cli.inputUserDetails("Please enter your AirlineDB credentials");
+
+                if (controller.isUserLoggedIn(details)) {
                     wasLoginSuccessful = true;
                 } else {
                     System.out.println("Invalid credentials");
@@ -81,8 +81,8 @@ public class AirlineDBConsole {
             case 1: // Register
                 UserDetails newUserDetails = cli.inputUserDetails("Create your AirlineDB account");
                 controller.register(newUserDetails);
-                controller.login(newUserDetails.getCreds());
-                if (controller.isUserLoggedIn(newUserDetails.getCreds())) {
+
+                if (controller.isUserLoggedIn(newUserDetails)) {
                     wasLoginSuccessful = true;
                 } else {
                     System.out.println("Registration failed");

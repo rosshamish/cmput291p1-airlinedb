@@ -6,8 +6,7 @@ import java.util.Date;
  * Created by ross on 15-10-23.
  */
 public class UserDetails {
-    private Credentials creds;
-    private String name;
+    private char[] pass;
     private String email;
 
     public String getEmail() {
@@ -18,19 +17,11 @@ public class UserDetails {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getPass() {
+        return String.valueOf(pass);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Credentials getCreds() {
-        return creds;
-    }
-
-    public void setCreds(Credentials creds) {
-        this.creds = creds;
+    public void setPass(char[] pass) {
+        this.pass = pass;
     }
 }

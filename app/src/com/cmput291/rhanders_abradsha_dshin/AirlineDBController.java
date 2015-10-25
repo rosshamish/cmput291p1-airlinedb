@@ -1,8 +1,9 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import com.sun.tools.corba.se.idl.constExpr.Not;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException;
 
 /**
@@ -28,15 +29,27 @@ public class AirlineDBController {
         throw new NotImplementedException();
     }
 
-    public boolean isUserLoggedIn(Credentials loginCreds) {
-        throw new NotImplementedException();
+    public boolean isUserLoggedIn(UserDetails details) {
+        String email = details.getEmail();
+        String pass = details.getPass();
+
+        String query = "SELECT email, pass FROM users WHERE email =" + email + "AND pass =" + pass + ';';
+        ResultSet results = airlineDB.executeQuery(query);
+        try {
+            if (!results.next()) {
+                return false;
+            }
+        } catch (SQLException e) {}                   //TODO: not sure if this is alright
+        return true;
     }
 
-    public void login(Credentials loginCreds) {
-        throw new NotImplementedException();
-    }
+
 
     public void register(UserDetails newUserDetails) {
-        throw new NotImplementedException();
+        String email = newUserDetails.getEmail();
+        String pass = newUserDetails.getPass();
+
+        String update = "INSERT INTO users VALUES(" + email + ',' + pass + ", null);";  // TODO: add to SQLQueries
+        airlineDB.executeUpdate(update);
     }
 }
