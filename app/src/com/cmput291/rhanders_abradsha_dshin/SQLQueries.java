@@ -106,7 +106,7 @@ public class SQLQueries {
     }
 
 
-    public static String bookingupdate(String name, SearchResults results){
+    public static String bookingupdate(String name, Integer tno, SearchResults results){
         return "hi";
     }
 

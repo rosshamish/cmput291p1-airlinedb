@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by ross on 15-10-23.
@@ -73,8 +74,37 @@ public class AirlineDBController {
         airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
     }
 
-    public void updatebookings(String name, SearchResults results){
-        airlineDB.executeUpdate(SQLQueries.bookingupdate(name, results));
+    public void updatebookings(String name, SearchResults search){
+        ResultSet checkpass = airlineDB.executeQuery(SQLQueries.checkname(name));
+        try{
+            if(!checkpass.next()){
+                ResultSet airline = airlineDB.executeQuery(SQLQueries.getairlines(search.getSrc()));
+                String country = airline.getString("country");
+                airlineDB.executeQuery(SQLQueries.addpass(name, country));
+            }
+        }catch (SQLException e){};
+
+        Boolean validT = false;
+        Integer tno = 0;
+        while (validT == false) {
+            ResultSet validticket = airlineDB.executeQuery(SQLQueries.checktno(tno));
+            try{
+                if (!validticket.next()){
+                    validT = true;
+                }
+                else{
+                    Random r = new Random();
+                    tno = r.nextInt(1000000); 
+                }
+
+            }catch (SQLException e){};
+        }
+        try{
+            airlineDB.executeUpdate(SQLQueries.bookingupdate(name, tno, search));
+            System.out.println("You made a booking with the ticket number: " + tno);
+        }catch (Exception e) {
+            System.err.println("Failed to make a booking");
+        }
     }
 
 
@@ -84,7 +114,7 @@ public class AirlineDBController {
         airlineDB.executeQuery(SQLQueries.dropOCview());
         airlineDB.executeQuery(SQLQueries.createOCview());
         airlineDB.executeQuery(SQLQueries.createAFview());
-        if (con = false) {
+        if (con == false) {
             ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
             try {
                 while (results.next()) {

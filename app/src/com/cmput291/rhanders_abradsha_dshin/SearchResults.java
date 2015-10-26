@@ -34,7 +34,37 @@ public class SearchResults {
         this.depdate = depdate;
     }
 
+    public String getFlightNo1() {
+        return flightNo1;
+    }
 
+    public String getFlightNo2() {
+        return flightNo2;
+    }
+
+    public String getActDepTime() {
+        return actDepTime;
+    }
+
+    public String getActArrTime() {
+        return actArrTime;
+    }
+
+    public String getStops() {
+        return stops;
+    }
+
+    public String getLayover() {
+        return layover;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getSeats() {
+        return seats;
+    }
 
     public SearchResults(ResultSet row) {
         try {
