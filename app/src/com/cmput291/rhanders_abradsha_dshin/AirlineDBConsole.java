@@ -72,22 +72,23 @@ public class AirlineDBConsole {
             case 0: // Login
                 UserDetails details = cli.inputUserDetails("Please enter your AirlineDB credentials");
 
-                if (controller.isUserLoggedIn(details)) {
-                    wasLoginSuccessful = true;
+                if (controller.userExists(details)) {
                     controller.login(details);
+                    wasLoginSuccessful = true;
                 } else {
-                    System.out.println("Invalid credentials");
+                    System.out.println("Login failed: Invalid credentials");
+                    wasLoginSuccessful = false;
                 }
                 break;
             case 1: // Register
                 UserDetails newUserDetails = cli.inputUserDetails("Create your AirlineDB account");
-                controller.register(newUserDetails);
-
-                if (controller.isUserLoggedIn(newUserDetails)) {
-                    wasLoginSuccessful = true;
-                    controller.login(newUserDetails);
+                if (controller.userExists(newUserDetails)) {
+                    wasLoginSuccessful = false;
+                    System.out.println("Registration failed: User already exists");
                 } else {
-                    System.out.println("Registration failed");
+                    controller.register(newUserDetails);
+                    controller.login(newUserDetails);
+                    wasLoginSuccessful = true;
                 }
                 break;
             case 2: // Exit
@@ -167,10 +168,26 @@ public class AirlineDBConsole {
 
     private void makeBooking(UserSearch search, Boolean con) {
         System.out.println(SearchResults.rowDes());
-        SearchResults bookflight = (SearchResults)cli.printObjectRows(controller.listflights(search, con), "Select flight to book");
+        SearchResults flightToBook = (SearchResults)cli.pickObjectFromList(controller.listFlights(search, con), "Select flight to book");
 
         String name = cli.inputname("Please enter your name");
-        controller.updatebookings(name, bookflight);
+        BookingStatus bookingStatus = controller.attemptBookFlight(name, flightToBook);
+        switch (bookingStatus.getState()) {
+            case FAIL_NO_SEATS:
+                System.out.println("Booking failed: No seats left");
+                break;
+            case FAIL_NO_REASON:
+                // TODO catch specific sqlexceptions for more specific failure messages
+                // In attemptBookFlight, check what the SQLException was and add
+                // BookingStatus.State enum values to reflect them. Return those BookingStatus's
+                // and add more case statements here to print out a descriptive message for each
+                System.out.println("Booking failed: Reason unknown");
+                break;
+            case SUCCESS:
+                System.out.println("Booking made. Ticket Number: " +
+                        String.valueOf(bookingStatus.getTicketNo()));
+                break;
+        }
     }
 
     private void listBookings() {
@@ -180,7 +197,7 @@ public class AirlineDBConsole {
             return;
         }
         System.out.println(SimpleBooking.rowDescription());
-        SimpleBooking booking = (SimpleBooking)cli.printObjectRows(bookings, "Select booking to modify");
+        SimpleBooking booking = (SimpleBooking)cli.pickObjectFromList(bookings, "Select booking to modify");
         while(true) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {

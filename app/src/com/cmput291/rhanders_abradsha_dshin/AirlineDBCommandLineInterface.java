@@ -48,7 +48,7 @@ public class AirlineDBCommandLineInterface {
         return choice;
     }
 
-    public Object printObjectRows(ArrayList<?> objects, String clarification) {
+    public Object pickObjectFromList(ArrayList<?> objects, String clarification) {
         Integer choice = null;
         Integer optNum = 1;
         for (Object opt : objects) {

@@ -2,10 +2,6 @@ package com.cmput291.rhanders_abradsha_dshin;
 
 import oracle.jdbc.driver.OracleDriver;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 
 /**
@@ -59,10 +55,6 @@ public class AirlineDB {
         return resultSet;
     }
 
-    public ResultSet executeQueryFromFile(String queryFilename) {
-        return executeQuery(readFileIntoString(queryFilename));
-    }
-
     public Boolean executeUpdate(String update) {
         try {
             Statement stmt = connection.createStatement(
@@ -74,20 +66,5 @@ public class AirlineDB {
             return false;
         }
         return true;
-    }
-
-    public void executeUpdateFromFile(String updateFilename) {
-        executeUpdate(readFileIntoString(updateFilename));
-    }
-
-    private String readFileIntoString(String filename) {
-        String path = System.getProperty("user.dir");
-        byte[] encoded = new byte[0];
-        try {
-            encoded = Files.readAllBytes(Paths.get(path + "/filename"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new String(encoded, Charset.defaultCharset());
     }
 }

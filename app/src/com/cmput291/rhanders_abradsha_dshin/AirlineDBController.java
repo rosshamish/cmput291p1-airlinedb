@@ -1,7 +1,5 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLInvalidAuthorizationSpecException;
@@ -28,61 +26,71 @@ public class AirlineDBController {
         airlineDB.disconnect();
     }
 
-    public boolean logout() {
-        airlineDB.executeUpdate(SQLQueries.lastLoginUpdate(currentUser.getEmail()));
-        currentUser = null;
-        return true;
+    public void register(UserDetails newUserDetails) {
+        newUserDetails.setAgent(false);
+
+        if (userExists(newUserDetails)) {
+            return;
+        }
+
+        airlineDB.executeUpdate(SQLQueries.userUpdate(newUserDetails.getEmail(),
+                newUserDetails.getPass()));
     }
 
-    public boolean isUserLoggedIn(UserDetails details) {
+    public boolean userExists(UserDetails details) {
         String email = details.getEmail();
         String pass = details.getPass();
         details.setAgent(false);
-        ResultSet uresults = airlineDB.executeQuery(SQLQueries.loginU(email, pass));
-        ResultSet aresults = airlineDB.executeQuery(SQLQueries.loginA(email));
+        ResultSet uresults = airlineDB.executeQuery(SQLQueries.selectUserWith(email));
+        ResultSet aresults = airlineDB.executeQuery(SQLQueries.selectAgentWith(email));
 
         try {
             if (!uresults.next()) {
                 return false;
             }
-            if(aresults.next()){
-                details.setAgent(true);            }
-        } catch (SQLException e) {}                   //TODO: not sure if this is alright
+            if (aresults.next()) {
+                details.setAgent(true);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+
         return true;
+    }
+
+    public boolean isUserLoggedIn(UserDetails details) {
+        return currentUser.getEmail().equals(details.getEmail());
     }
 
     public void login(UserDetails details) {
         currentUser = details;
+        airlineDB.executeUpdate(SQLQueries.updateLastLogin(currentUser.getEmail()));
+    }
+
+    public UserDetails getLoggedInUser() {
+        return currentUser;
+    }
+
+    public Boolean logout() {
+        currentUser = null;
+        return true;
     }
 
     public Boolean isAgent() {
         return currentUser.getAgent();
     }
 
-    public void register(UserDetails newUserDetails) {
-        String email = newUserDetails.getEmail();
-        String pass = newUserDetails.getPass();
-        newUserDetails.setAgent(false);
-        ResultSet usrresults = airlineDB.executeQuery(SQLQueries.checkusr(email));
-        try {
-            if (usrresults.next()){
-                System.out.println("This email has already been registered");
-                return;
-            }
-        }catch (SQLException e){}
-
-        airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
-    }
-
-    public void updatebookings(String name, SearchResults search){
-        ResultSet checkpass = airlineDB.executeQuery(SQLQueries.checkname(name));
+    public BookingStatus attemptBookFlight(String name, SearchResults flight){
+        ResultSet passengers = airlineDB.executeQuery(SQLQueries.selectPassengersWith(name));
         try{
-            if(!checkpass.next()){
-                ResultSet airline = airlineDB.executeQuery(SQLQueries.getairlines(search.getSrc()));
+            if(!passengers.next()){
+                ResultSet airline = airlineDB.executeQuery(SQLQueries.getairlines(flight.getSrc()));
                 String country = airline.getString("country");
-                airlineDB.executeQuery(SQLQueries.addpass(currentUser.getEmail(), name, country));
+                airlineDB.executeQuery(SQLQueries.addPassenger(currentUser.getEmail(), name, country));
             }
-        }catch (SQLException e){};
+        } catch (SQLException e){
+            System.err.println("SQLException: " + e.getMessage());
+        }
 
         Boolean validT = false;
         Integer tno = 0;
@@ -97,68 +105,73 @@ public class AirlineDBController {
                     tno = r.nextInt(1000000);
                 }
 
-            }catch (SQLException e){};
+            } catch (SQLException e){
+                System.err.println("SQLException: " + e.getMessage());
+            }
         }
-        try{
+
+        try {
             airlineDB.executeUpdate(SQLQueries.startTran());
             ResultSet validseat = airlineDB.executeQuery(SQLQueries.assertroom());
-            if (!validseat.next()){
-                System.out.println("No seats left");
+            if (!validseat.next()) {
                 airlineDB.executeUpdate(SQLQueries.finishTran());
-                return;
+                return new BookingStatus(BookingStatus.State.FAIL_NO_SEATS);
             }
-            airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(search.getPrice())));
-            ResultSet fares1 = airlineDB.executeQuery(SQLQueries.getfare(search.getFlightNo1()));
+            airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(flight.getPrice())));
+            ResultSet fares1 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo1()));
             String fare1 = fares1.getString("fare");
-            ResultSet fares2 = airlineDB.executeQuery(SQLQueries.getfare(search.getFlightNo2()));
+            ResultSet fares2 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo2()));
             String fare2 = fares2.getString("fare");
 
-            if (search.getFlightNo2()==null){
-                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo1(), fare1, search.getDepdate(),
-                        Integer.valueOf(search.getSeats())));
+            if (flight.getFlightNo2()==null){
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo1(), fare1, flight.getDepdate(),
+                        Integer.valueOf(flight.getSeats())));
 
             }
             else{
-                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo1(), fare1, search.getDepdate(),
-                        Integer.valueOf(search.getSeats())));
-                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo2(), fare2, search.getDepdate(),
-                        Integer.valueOf(search.getSeats())));
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo1(), fare1, flight.getDepdate(),
+                        Integer.valueOf(flight.getSeats())));
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo2(), fare2, flight.getDepdate(),
+                        Integer.valueOf(flight.getSeats())));
             }
             airlineDB.executeUpdate(SQLQueries.finishTran());
-            System.out.println("You made a booking with the ticket number: " + tno);
-        }catch (Exception e) {
-            System.err.println("Failed to make a booking");
+            return new BookingStatus(tno);
+        } catch (Exception e) {
+            return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
         }
     }
 
 
-    public ArrayList<SearchResults> listflights(UserSearch search, Boolean con){
-        ArrayList<SearchResults> listflights = new ArrayList();
+    public ArrayList<SearchResults> listFlights(UserSearch search, Boolean con){
+        ArrayList<SearchResults> flightsList = new ArrayList();
         airlineDB.executeQuery(SQLQueries.createOCview());
         airlineDB.executeQuery(SQLQueries.createAFview());
         if (con == false) {
             ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
             try {
                 while (results.next()) {
-                    listflights.add(new SearchResults(results));
+                    flightsList.add(new SearchResults(results));
                 }
             } catch (SQLException e) {
+                System.err.println("in listFlights, con == false, SQLException: " + e.getMessage());
             }
         }
         else{
             ResultSet results = airlineDB.executeQuery(SQLQueries.userCSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
             try {
                 while (results.next()) {
-                    listflights.add(new SearchResults(results));
+                    flightsList.add(new SearchResults(results));
                 }
             } catch (SQLException e) {
+                System.err.println("in listFlights, con == true, SQLException: " + e.getMessage());
             }
         }
         airlineDB.executeQuery(SQLQueries.dropAFview());
         airlineDB.executeQuery(SQLQueries.dropOCview());
-        return listflights;
+        return flightsList;
     }
 
+    // TODO @bradshaw do you plan to use this? It's unused right now
     public ArrayList<ScheduledFlight> recordArrival() {
         ArrayList<ScheduledFlight> flights = new ArrayList();
         ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
@@ -167,6 +180,7 @@ public class AirlineDBController {
                 flights.add(new ScheduledFlight(results));
             }
         } catch (SQLException e) {
+            System.err.println("in recordArrival(), SQLException: " + e.getMessage());
         }
         return flights;
     }
@@ -184,7 +198,9 @@ public class AirlineDBController {
             while(results.next()) {
                 bookings.add(new SimpleBooking(results));
             }
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+            System.err.println("in listBookings, SQLException: " + e.getMessage());
+        }
         return bookings;
     }
 
