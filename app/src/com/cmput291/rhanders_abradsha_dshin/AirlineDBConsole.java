@@ -205,6 +205,7 @@ public class AirlineDBConsole {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {
                 case 0: // Booking Details
+                    System.out.println(SimpleBooking.descriptiveRowDescription());
                     System.out.println(booking.descriptiveToString());
                     break;
                 case 1: // Delete Booking

@@ -13,7 +13,6 @@ public class SimpleBooking {
     private String flightNo;
     private String fare;
     private String seat;
-    private String name;
     private String email;
 
     public String getFlightNo() {return this.flightNo; }
@@ -25,13 +24,12 @@ public class SimpleBooking {
             //Needed in basic viewing
             this.ticketNo = row.getString("tno");
             this.passName = row.getString("name");
-            this.depDate = row.getString("dep_date");
+            this.depDate = row.getString("dep_date").substring(0,10);
             this.price = row.getString("paid_price");
             //Needed in descriptive viewing
             this.flightNo = row.getString("flightno");
             this.fare = row.getString("fare");
             this.seat = row.getString("seat");
-            this.name = row.getString("name");
             this.email = row.getString("email");
 
         } catch (Exception e) {
@@ -43,8 +41,10 @@ public class SimpleBooking {
         return "tno\tname\tdep_date\tpaid_price";
     }
 
+    public static String descriptiveRowDescription() { return rowDescription() + "\tflightno\tfare\tseat\temail"; }
+
     public String descriptiveToString() {
-        return this.toString() + "\t" + flightNo + "\t" + fare + "\t" + seat + "\t" + name + "\t" + email;
+        return this.toString() + "\t" + flightNo + "\t" + fare + "\t" + seat + "\t" + email;
     }
 
     @Override
