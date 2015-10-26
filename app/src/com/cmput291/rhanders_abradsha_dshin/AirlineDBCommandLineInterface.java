@@ -88,6 +88,17 @@ public class AirlineDBCommandLineInterface {
         return search;
     }
 
+    public String inputname(String title) {
+        String name;
+        if (title.length() > 0) {
+            System.out.println(title);
+        }
+
+        name = this.readLine("Name: ");
+
+        return name;
+    }
+
     public Credentials inputCredentials(String title) {
         Credentials creds = new Credentials();
 

@@ -142,15 +142,16 @@ public class AirlineDBConsole {
 
     private void searchForFlights() {
         UserSearch search = cli.inputsearch("Please enter search criteria");
-
-        String src = search.getSrc();
-        String dst = search.getDst();
-        String dep = search.getDepdate();
-
-
+        makeBooking(search);
     }
 
-    private void makeBooking() {}
+    private void makeBooking(UserSearch search) {
+        System.out.println(SearchResults.rowDes());
+        SearchResults bookflight = (SearchResults)cli.printObjectRows(controller.listflights(search), "Select flight to book");
+
+        String name = cli.inputname("Please enter your name");
+        controller.updatebookings(name, bookflight);
+    }
 
     private void listBookings() {
         System.out.println(SimpleBooking.rowDescription());

@@ -43,6 +43,14 @@ public class SQLQueries {
         return "SELECT * FROM sch_flights";
     }
 
+    public static String userSearchQuery(String src, String dst, String deptime){
+        return "hi";
+    }
+
+    public static String bookingupdate(String name, SearchResults results){
+        return "hi";
+    }
+
     public static String userUpdate(String email, String pass) {
         return "INSERT INTO users VALUES('" + email + "','" + pass + "', null)";
 
