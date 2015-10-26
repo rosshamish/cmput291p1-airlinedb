@@ -134,8 +134,6 @@ public class AirlineDBController {
 
     public ArrayList<SearchResults> listflights(UserSearch search, Boolean con){
         ArrayList<SearchResults> listflights = new ArrayList();
-        airlineDB.executeQuery(SQLQueries.dropAFview());
-        airlineDB.executeQuery(SQLQueries.dropOCview());
         airlineDB.executeQuery(SQLQueries.createOCview());
         airlineDB.executeQuery(SQLQueries.createAFview());
         if (con == false) {

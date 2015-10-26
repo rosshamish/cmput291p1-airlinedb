@@ -58,7 +58,7 @@ public class SQLQueries {
                 "AS SELECT f.flightno, sf.dep_date, f.src, f.dst, f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)), " +
                 "f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24, " +
                 "fa.limit-count(tno), fa.price " +
-                "FROM flights f, flight_fares fa, sch_flights sf, booking b, airports a1, airports a2 " +
+                "FROM flights f, flight_fares fa, sch_flights sf, bookings b, airports a1, airports a2 " +
                 "WHERE f.flightno=sf.flightno and f.flightno=fa.flightno and f.src = a1.acode and f.dst = a2.acode " +
                 "and fa.flightno=b.flightno(+) and sf.dep_date = b.dep_date(+) " +
                 "GROUP BY f.flightno, sf.dep_date, f.src, f.dst, f.dep_time, f.est_dur, a2.tzone, a1.tzone, " +
@@ -82,11 +82,11 @@ public class SQLQueries {
                 "FROM " +
                 "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('%" + src + "%') and lower(dst) = lower('%" + dst + "%') " +
+                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
                 "UNION" +
                 "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) LIKE lower('%" + src + "%') and lower(dst) LIKE lower('%" + dst + "%')) " +
+                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "')) " +
                 "ORDER BY price ASC";
     }
 
@@ -97,11 +97,11 @@ public class SQLQueries {
                 "FROM " +
                 "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('%" + src + "%') and lower(dst) = lower('%" + dst + "%') " +
+                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
                 "UNION" +
                 "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) LIKE lower('%" + src + "%') and lower(dst) LIKE lower('%" + dst + "%')) " +
+                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "')) " +
                 "ORDER BY connections ASC, price ASC";
     }
 
