@@ -80,28 +80,28 @@ public class SQLQueries {
                 "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END as connections, " +
                 "layover, price, seats " +
                 "FROM " +
-                "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
+                "((SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
+                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) " +
                 "UNION" +
-                "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
+                "(SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "')) " +
+                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "'))) " +
                 "ORDER BY price ASC";
     }
 
     public static String userCSearchQuery(String src, String dst, String depdate){
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
-                "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END as connections, " +
+                "to_char(arr_time,'HH24:MI') as arr_time, (CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END) as connections, " +
                 "layover, price, seats " +
                 "FROM " +
-                "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
+                "((SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
+                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) " +
                 "UNION" +
-                "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
+                "(SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "')) " +
+                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "'))) " +
                 "ORDER BY connections ASC, price ASC";
     }
 
