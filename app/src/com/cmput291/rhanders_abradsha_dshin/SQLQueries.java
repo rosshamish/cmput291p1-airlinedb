@@ -72,7 +72,7 @@ public class SQLQueries {
                 "FROM available_flights a1, available_flights a2 " +
                 "WHERE a1.dst=a2.src " +
                 "GROUP BY a1.flightno, a2.flightno, a1.dep_date, a1.src, a2.dst, a2.dep_time, a1.arr_time, " +
-                "a1.price, a2.price, a1.seats, a2.seats";
+                "LEAST(a1.seats, a2.seats)";
     }
     public static String userSearchQuery(String src, String dst, String depdate) {
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
