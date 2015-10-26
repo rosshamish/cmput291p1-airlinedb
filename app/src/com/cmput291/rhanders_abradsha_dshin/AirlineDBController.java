@@ -64,7 +64,6 @@ public class AirlineDBController {
 
     public void login(UserDetails details) {
         currentUser = details;
-        airlineDB.executeUpdate(SQLQueries.updateLastLogin(currentUser.getEmail()));
     }
 
     public UserDetails getLoggedInUser() {
@@ -73,6 +72,7 @@ public class AirlineDBController {
 
     public Boolean logout() {
         currentUser = null;
+        airlineDB.executeUpdate(SQLQueries.updateLastLogin(currentUser.getEmail()));
         return true;
     }
 
