@@ -73,6 +73,36 @@ public class AirlineDBController {
         airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
     }
 
+    public void updatebookings(String name, SearchResults results){
+        airlineDB.executeUpdate(SQLQueries.bookingupdate(name, results));
+    }
+
+
+    public ArrayList<SearchResults> listflights(UserSearch search){
+        ArrayList<SearchResults> listflights = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
+        try{
+            while(results.next()){
+                listflights.add(new SearchResults(results));
+            }
+        }catch (SQLException e){}
+
+        return listflights;
+    }
+
+    public ArrayList<ScheduledFlight> recordArrival() {
+        ArrayList<ScheduledFlight> flights = new ArrayList();
+        ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
+        try {
+            while (results.next()) {
+                flights.add(new ScheduledFlight(results));
+            }
+        } catch (SQLException e) {
+        }
+        return flights;
+    }
+
+
     public Boolean recordArrival(ScheduledFlight flight) {
             return airlineDB.executeUpdate(SQLQueries.
                     arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
