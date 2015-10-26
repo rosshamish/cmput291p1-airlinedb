@@ -44,7 +44,7 @@ public class AirlineDBConsole {
         }
         disconnect();
 
-        System.out.println("Thanks for choosing AirlineDB");
+        System.out.println("\nThanks for choosing AirlineDB\n");
     }
 
     private void disconnect() {
