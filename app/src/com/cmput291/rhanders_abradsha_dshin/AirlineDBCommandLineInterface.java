@@ -100,6 +100,20 @@ public class AirlineDBCommandLineInterface {
         return creds;
     }
 
+    public ScheduledFlight inputFlightArrival() {
+        String flightNo = this.readLine("Flight number: ");
+        String depDate = this.readLine("Departure date (DD-Mon-YYYY): ");
+        String time = this.readLine("Arrival time (hh24:mi): ");
+        return new ScheduledFlight(flightNo, depDate, time, null);
+    }
+
+    public ScheduledFlight inputFlightDeparture() {
+        String flightNo = this.readLine("Flight number: ");
+        String depDate = this.readLine("Departure date (DD-Mon-YYYY): ");
+        String time = this.readLine("Departure time (hh24:mi): ");
+        return new ScheduledFlight(flightNo, depDate, null, time);
+    }
+
     private String readLine(String format, Object... args) {
         if (System.console() != null) {
             return System.console().readLine(format, args);

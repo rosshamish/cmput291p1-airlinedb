@@ -44,7 +44,7 @@ public class AirlineDBController {
             if (!uresults.next()) {
                 return false;
             }
-            if(uresults.next() && aresults.next()){
+            if(aresults.next()){
                 details.setAgent(true);            }
         } catch (SQLException e) {}                   //TODO: not sure if this is alright
         return true;
@@ -66,22 +66,16 @@ public class AirlineDBController {
         try {
             if (usrresults.next()){
                 System.out.println("This email has already been registered");
+                return;
             }
         }catch (SQLException e){}
 
         airlineDB.executeUpdate(SQLQueries.userUpdate(email, pass));
     }
 
-    public ArrayList<ScheduledFlight> recordArrival() {
-        ArrayList<ScheduledFlight> flights = new ArrayList();
-        ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
-        try {
-            while(results.next()) {
-                flights.add(new ScheduledFlight(results));
-            }
-        } catch (SQLException e) {}
-        return flights;
-
+    public Boolean recordArrival(ScheduledFlight flight) {
+            return airlineDB.executeUpdate(SQLQueries.
+                    arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
     }
 
     public ArrayList<SimpleBooking> listBookings() {
@@ -100,7 +94,8 @@ public class AirlineDBController {
                 booking.getFlightNo(), booking.getDepDate()));
     }
 
-    public void recordDeparture() {
-        throw new NotImplementedException();
+    public Boolean recordDeparture(ScheduledFlight flight) {
+        return airlineDB.executeUpdate(SQLQueries.
+                    departureUpdate(flight.getActDepTime(), flight.getFlightNo(), flight.getDepDate()));
     }
 }

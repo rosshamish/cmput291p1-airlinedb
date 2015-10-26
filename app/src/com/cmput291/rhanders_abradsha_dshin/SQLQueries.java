@@ -13,13 +13,15 @@ public class SQLQueries {
     }
 
     public static String departureUpdate(String time, String flightNo, String depDate){
-        return "UPDATE sch_flights SET act_dep_time = '" + time +
-                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "'";
+        return "UPDATE sch_flights SET act_dep_time = to_date('" + time +
+                "', 'hh24:mi') WHERE flightno = '" + flightNo + "' AND dep_date " +
+                "= to_date('" + depDate + "', 'DD-Mon-YYYY')";
     }
 
     public static String arrivalUpdate(String time, String flightNo, String depDate){
-        return "UPDATE sch_flights SET act_arr_time = '" + time +
-                "' WHERE flightno = '" + flightNo + "' and dep_date = '" + depDate + "'";
+        return "UPDATE sch_flights SET act_arr_time = to_date('" + time +
+                "', 'hh24:mi') WHERE flightno = '" + flightNo + "' AND dep_date " +
+                "= to_date('" + depDate + "', 'DD-Mon-YYYY')";
     }
 
     public static String lastLoginUpdate(String email){
@@ -38,13 +40,7 @@ public class SQLQueries {
         return "SELECT email FROM users WHERE email ='" + email + "'";
     }
 
-
-    public static String allScheduledFlights() {
-        return "SELECT * FROM sch_flights";
-    }
-
     public static String userUpdate(String email, String pass) {
         return "INSERT INTO users VALUES('" + email + "','" + pass + "', null)";
-
     }
 }
