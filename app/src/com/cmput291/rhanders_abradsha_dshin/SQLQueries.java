@@ -15,13 +15,13 @@ public class SQLQueries {
     public static String departureUpdate(String time, String flightNo, String depDate){
         return "UPDATE sch_flights SET act_dep_time = to_date('" + time +
                 "', 'hh24:mi') WHERE flightno = '" + flightNo + "' AND dep_date " +
-                "= to_date('" + depDate + "', 'DD-Mon-YYYY')";
+                "= '" + depDate + "'";
     }
 
     public static String arrivalUpdate(String time, String flightNo, String depDate){
         return "UPDATE sch_flights SET act_arr_time = to_date('" + time +
                 "', 'hh24:mi') WHERE flightno = '" + flightNo + "' AND dep_date " +
-                "= to_date('" + depDate + "', 'DD-Mon-YYYY')";
+                "= '" + depDate + "'";
     }
 
     public static String lastLoginUpdate(String email){
