@@ -61,7 +61,7 @@ public class AirlineDBController {
     public void register(UserDetails newUserDetails) {
         String email = newUserDetails.getEmail();
         String pass = newUserDetails.getPass();
-
+        newUserDetails.setAgent(false);
         ResultSet usrresults = airlineDB.executeQuery(SQLQueries.checkusr(email));
         try {
             if (usrresults.next()){
