@@ -151,12 +151,23 @@ public class AirlineDBConsole {
 
     private void searchForFlights() {
         UserSearch search = cli.inputsearch("Please enter search criteria");
-        makeBooking(search);
+        Boolean con = false;
+        Integer choice = cli.promptForChoice((AirlineDBCommandLineInterface.PromptName.Connections));
+        switch (choice){
+            case 0: // Search by price only
+                makeBooking(search, con);
+                break;
+            case 1: //search by price and connections
+                con = true;
+                makeBooking(search, con);
+                break;
+        }
+
     }
 
-    private void makeBooking(UserSearch search) {
+    private void makeBooking(UserSearch search, Boolean con) {
         System.out.println(SearchResults.rowDes());
-        SearchResults bookflight = (SearchResults)cli.printObjectRows(controller.listflights(search), "Select flight to book");
+        SearchResults bookflight = (SearchResults)cli.printObjectRows(controller.listflights(search, con), "Select flight to book");
 
         String name = cli.inputname("Please enter your name");
         controller.updatebookings(name, bookflight);

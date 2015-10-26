@@ -15,7 +15,8 @@ public class AirlineDBCommandLineInterface {
         Login,
         Main,
         AgentMain,
-        Bookings
+        Bookings,
+        Connections
     }
 
     private static final HashMap<PromptName, String[]> prompts = new HashMap<PromptName, String[]>() {{
@@ -24,6 +25,7 @@ public class AirlineDBCommandLineInterface {
         put(PromptName.AgentMain, new String[]{"Search for Flight", "List Bookings",
                 "Record Flight Departure", "Record Flight Arrival", "Logout"});
         put(PromptName.Bookings, new String[]{"Details", "Delete", "Return to Menu"});
+        put(PromptName.Connections, new String[]{"Sort by Price","Sort by Price and Connections"});
     }};
 
     public Integer promptForChoice(PromptName name) {
@@ -83,7 +85,7 @@ public class AirlineDBCommandLineInterface {
 
         search.setSrc(this.readLine("Source Airport: "));
         search.setDst(this.readLine("Destination Airport: "));
-        search.setDepdate(this.readLine("Departure Date: "));
+        search.setDepdate(this.readLine("Departure Date (DD-Mon-YYYY): "));
 
         return search;
     }

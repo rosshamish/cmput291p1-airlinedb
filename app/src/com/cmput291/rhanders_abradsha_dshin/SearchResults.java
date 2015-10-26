@@ -42,9 +42,9 @@ public class SearchResults {
             this.flightNo2 = row.getString("flightno2");
             this.src = row.getString("src");
             this.dst = row.getString("dst");
-            this.actDepTime = row.getString("act_dep_time");
-            this.actArrTime = row.getString("act_arr_time");
-            this.stops = row.getString("#of stops");
+            this.actDepTime = row.getString("dep_time");
+            this.actArrTime = row.getString("arr_time");
+            this.stops = row.getString("connections");
             this.layover = row.getString("layover");
             this.price = row.getString("price");
             this.seats = row.getString("available seats");
@@ -55,7 +55,7 @@ public class SearchResults {
     }
 
     public static String rowDes() {
-        return "flightno1\tflightno2\tsrc\tdst\tact_dep_time\tact_arr_time\t#of stops\tlayover\tprice\tavailable seats";
+        return "flightno1\tflightno2\tsrc\tdst\tdep_time\tarr_time\tconnections\tlayover\tprice\tavailable seats";
     }
 
     @Override

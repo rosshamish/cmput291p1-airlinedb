@@ -78,15 +78,32 @@ public class AirlineDBController {
     }
 
 
-    public ArrayList<SearchResults> listflights(UserSearch search){
+    public ArrayList<SearchResults> listflights(UserSearch search, Boolean con){
         ArrayList<SearchResults> listflights = new ArrayList();
-        ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
-        try{
-            while(results.next()){
-                listflights.add(new SearchResults(results));
+        airlineDB.executeQuery(SQLQueries.dropAFview());
+        airlineDB.executeQuery(SQLQueries.dropOCview());
+        airlineDB.executeQuery(SQLQueries.createOCview());
+        airlineDB.executeQuery(SQLQueries.createAFview());
+        if (con = false) {
+            ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
+            try {
+                while (results.next()) {
+                    listflights.add(new SearchResults(results));
+                }
+            } catch (SQLException e) {
             }
-        }catch (SQLException e){}
-
+        }
+        else{
+            ResultSet results = airlineDB.executeQuery(SQLQueries.userCSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
+            try {
+                while (results.next()) {
+                    listflights.add(new SearchResults(results));
+                }
+            } catch (SQLException e) {
+            }
+        }
+        airlineDB.executeQuery(SQLQueries.dropAFview());
+        airlineDB.executeQuery(SQLQueries.dropOCview());
         return listflights;
     }
 
