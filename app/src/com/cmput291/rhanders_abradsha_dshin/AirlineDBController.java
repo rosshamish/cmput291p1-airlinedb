@@ -80,7 +80,7 @@ public class AirlineDBController {
             if(!checkpass.next()){
                 ResultSet airline = airlineDB.executeQuery(SQLQueries.getairlines(search.getSrc()));
                 String country = airline.getString("country");
-                airlineDB.executeQuery(SQLQueries.addpass(name, country));
+                airlineDB.executeQuery(SQLQueries.addpass(currentUser.getEmail(), name, country));
             }
         }catch (SQLException e){};
 
@@ -94,13 +94,37 @@ public class AirlineDBController {
                 }
                 else{
                     Random r = new Random();
-                    tno = r.nextInt(1000000); 
+                    tno = r.nextInt(1000000);
                 }
 
             }catch (SQLException e){};
         }
         try{
-            airlineDB.executeUpdate(SQLQueries.bookingupdate(name, tno, search));
+            airlineDB.executeUpdate(SQLQueries.startTran());
+            ResultSet validseat = airlineDB.executeQuery(SQLQueries.assertroom());
+            if (!validseat.next()){
+                System.out.println("No seats left");
+                airlineDB.executeUpdate(SQLQueries.finishTran());
+                return;
+            }
+            airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(search.getPrice())));
+            ResultSet fares1 = airlineDB.executeQuery(SQLQueries.getfare(search.getFlightNo1()));
+            String fare1 = fares1.getString("fare");
+            ResultSet fares2 = airlineDB.executeQuery(SQLQueries.getfare(search.getFlightNo2()));
+            String fare2 = fares2.getString("fare");
+
+            if (search.getFlightNo2()==null){
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo1(), fare1, search.getDepdate(),
+                        Integer.valueOf(search.getSeats())));
+
+            }
+            else{
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo1(), fare1, search.getDepdate(),
+                        Integer.valueOf(search.getSeats())));
+                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, search.getFlightNo2(), fare2, search.getDepdate(),
+                        Integer.valueOf(search.getSeats())));
+            }
+            airlineDB.executeUpdate(SQLQueries.finishTran());
             System.out.println("You made a booking with the ticket number: " + tno);
         }catch (Exception e) {
             System.err.println("Failed to make a booking");

@@ -82,11 +82,11 @@ public class SQLQueries {
                 "FROM " +
                 "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
+                "lower(src) = lower('%" + src + "%') and lower(dst) = lower('%" + dst + "%') " +
                 "UNION" +
                 "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) " +
+                "lower(src) LIKE lower('%" + src + "%') and lower(dst) LIKE lower('%" + dst + "%')) " +
                 "ORDER BY price ASC";
     }
 
@@ -97,21 +97,57 @@ public class SQLQueries {
                 "FROM " +
                 "(SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
                 "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "') " +
+                "lower(src) = lower('%" + src + "%') and lower(dst) = lower('%" + dst + "%') " +
                 "UNION" +
                 "SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
                 "FROM available_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) " +
+                "lower(src) LIKE lower('%" + src + "%') and lower(dst) LIKE lower('%" + dst + "%')) " +
                 "ORDER BY connections ASC, price ASC";
     }
 
-
-    public static String bookingupdate(String name, Integer tno, SearchResults results){
-        return "hi";
+    public static String startTran(){
+        return "START TRANSACTION";
     }
 
+    public static String finishTran(){
+        return "COMMIT";
+    }
+
+    public static String assertroom(){
+        return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
+    }
+
+    public static String ticketupdate(String email, String name, Integer tno, Integer price){
+        return "INSERT INTO tickets VALUES('" + email + "','" + name + "'," + tno + "," + price +")";
+    }
+
+    public static String bookingupdate(Integer tno, String flightno, String fare,String depdate, Integer seats){
+        return "INSERT INTO bookings VALUES(" + tno + ",'" + flightno + "','" + fare +
+                "', TO_DATE('" + depdate + "','DD-Mon-YYYY')," +  seats +")";
+    }
+
+    public static String checkname(String name){
+        return "SELECT name FROM passengers WHERE name = '" + name + "'";
+    }
+
+    public static String addpass(String email, String name, String country){
+        return "INSERT INTO passengers VALUES('" + email + "','" + name + "','" + country + "')";
+    }
+
+    public static String getairlines(String src){
+        return "SELECT country FROM airports WHERE acode = '" + src + "'";
+    }
+
+    public static String getfare(String flightno){
+        return "SELECT fare FROM flight_fares WHERE flightno = '" + flightno + "'";
+    }
+
+    public static String checktno(Integer tno){
+        return "SELECT tno FROM tickets WHERE tno = " + tno;
+    }
 
     public static String userUpdate(String email, String pass) {
         return "INSERT INTO users VALUES('" + email + "','" + pass + "', null)";
     }
 }
+
