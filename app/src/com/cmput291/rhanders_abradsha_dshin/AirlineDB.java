@@ -37,7 +37,7 @@ public class AirlineDB {
         return true;
     }
 
-    public void disconnect() {         // TODO: add a last login date to users table
+    public void disconnect() {
         try {
             connection.close();
         } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class AirlineDB {
         return executeQuery(readFileIntoString(queryFilename));
     }
 
-    public void executeUpdate(String update) {
+    public Boolean executeUpdate(String update) {
         try {
             Statement stmt = connection.createStatement(
                     ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -71,7 +71,9 @@ public class AirlineDB {
             stmt.executeUpdate(update);
         } catch (SQLException e) {
             System.err.printf("SQLException: %s\n", e.getMessage());
+            return false;
         }
+        return true;
     }
 
     public void executeUpdateFromFile(String updateFilename) {

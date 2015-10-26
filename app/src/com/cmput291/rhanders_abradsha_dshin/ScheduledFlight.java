@@ -6,6 +6,23 @@ import java.sql.ResultSet;
 public class ScheduledFlight {
 
     private String flightNo;
+
+    public String getFlightNo() {
+        return flightNo;
+    }
+
+    public String getDepDate() {
+        return depDate;
+    }
+
+    public String getActDepTime() {
+        return actDepTime;
+    }
+
+    public String getActArrTime() {
+        return actArrTime;
+    }
+
     private String depDate;
     private String actDepTime;
     private String actArrTime;
@@ -19,6 +36,13 @@ public class ScheduledFlight {
         } catch (Exception e) {
             System.out.println("oops missed a row");
         }
+    }
+
+    public ScheduledFlight(String flightNo, String depDate, String actArrTime, String actDepTime) {
+        this.flightNo = flightNo;
+        this.depDate = depDate;
+        this.actArrTime = actArrTime;
+        this.actDepTime = actDepTime;
     }
 
     public static String rowDescription() {

@@ -1,6 +1,7 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
 import java.sql.SQLInvalidAuthorizationSpecException;
+import java.util.ArrayList;
 
 /**
  * Created by ross on 15-10-21.
@@ -84,6 +85,7 @@ public class AirlineDBConsole {
 
                 if (controller.isUserLoggedIn(newUserDetails)) {
                     wasLoginSuccessful = true;
+                    controller.login(newUserDetails);
                 } else {
                     System.out.println("Registration failed");
                 }
@@ -132,12 +134,19 @@ public class AirlineDBConsole {
     }
 
     private void recordDeparture() {
-        //cli.printObjectRows(controller.recordDeparture());
-        mainMenu();
+        if (controller.recordDeparture(cli.inputFlightDeparture())) {
+            System.out.println("Updated departure date.");
+        } else {
+            System.out.println("Invalid data was entered.");
+        }
     }
 
     private void recordArrival() {
-        cli.printObjectRows(controller.recordArrival(), "too many rows");
+        if (controller.recordArrival(cli.inputFlightArrival())) {
+            System.out.println("Updated arrival date.");
+        } else {
+            System.out.println("Invalid data was entered.");
+        }
     }
 
     private void searchForFlights() {
@@ -154,8 +163,13 @@ public class AirlineDBConsole {
     }
 
     private void listBookings() {
+        ArrayList<SimpleBooking> bookings = controller.listBookings();
+        if (bookings.size() == 0) {
+            System.out.println("You have no bookings.");
+            return;
+        }
         System.out.println(SimpleBooking.rowDescription());
-        SimpleBooking booking = (SimpleBooking)cli.printObjectRows(controller.listBookings(), "Select booking to modify");
+        SimpleBooking booking = (SimpleBooking)cli.printObjectRows(bookings, "Select booking to modify");
         while(true) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {
@@ -170,12 +184,6 @@ public class AirlineDBConsole {
                     return;
             }
         }
-    }
-
-    private void cancelBooking() {
-        // TODO
-        System.out.println("WHOOPS DELETED ALL YOUR BOOKINGS");
-        mainMenu();
     }
 
     private void logout() {

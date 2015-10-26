@@ -26,7 +26,7 @@ public class UserDetails {
         this.pass = pass;
     }
 
-    public Boolean getAgent() { return true; }
+    public Boolean getAgent() { return agent; }
 
     public void setAgent(Boolean agent) { this.agent = agent; }
 }
