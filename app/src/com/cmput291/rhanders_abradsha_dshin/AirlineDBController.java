@@ -71,8 +71,9 @@ public class AirlineDBController {
     }
 
     public Boolean logout() {
+        String email = currentUser.getEmail();
         currentUser = null;
-        airlineDB.executeUpdate(SQLQueries.updateLastLogin(currentUser.getEmail()));
+        airlineDB.executeUpdate(SQLQueries.updateLastLogin(email));
         return true;
     }
 
@@ -168,21 +169,6 @@ public class AirlineDBController {
         return flightsList;
     }
 
-    // TODO @bradshaw do you plan to use this? It's unused right now
-    public ArrayList<ScheduledFlight> recordArrival() {
-        ArrayList<ScheduledFlight> flights = new ArrayList();
-        ResultSet results = airlineDB.executeQuery(SQLQueries.allScheduledFlights());
-        try {
-            while (results.next()) {
-                flights.add(new ScheduledFlight(results));
-            }
-        } catch (SQLException e) {
-            System.err.println("in recordArrival(), SQLException: " + e.getMessage());
-        }
-        return flights;
-    }
-
-
     public Boolean recordArrival(ScheduledFlight flight) {
             return airlineDB.executeUpdate(SQLQueries.
                     arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
@@ -202,8 +188,11 @@ public class AirlineDBController {
     }
 
     public void deleteBooking(SimpleBooking booking) {
+        //airlineDB.executeUpdate(SQLQueries.startTran());
         airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
                 booking.getFlightNo(), booking.getDepDate()));
+        airlineDB.executeUpdate(SQLQueries.cancelTicketUpdate(booking.getTicketNo()));
+        //airlineDB.executeUpdate(SQLQueries.finishTran());
     }
 
     public Boolean recordDeparture(ScheduledFlight flight) {

@@ -12,7 +12,12 @@ public class SQLQueries {
     }
 
     public static String cancelBookingUpdate(String ticketNo, String flightNo, String depDate) {
-        throw new NotImplementedException();
+        return "DELETE FROM bookings b WHERE b.tno = "+ ticketNo +" AND " +
+                "b.flightno = '"+ flightNo +"' AND b.dep_date = to_date('"+ depDate +"', 'YYYY-MM-DD')";
+    }
+
+    public static String cancelTicketUpdate(String ticketNo) {
+        return "DELETE FROM tickets t WHERE t.tno = " + ticketNo;
     }
 
     public static String departureUpdate(String time, String flightNo, String depDate) {
