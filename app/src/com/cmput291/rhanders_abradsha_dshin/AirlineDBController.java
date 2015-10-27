@@ -142,32 +142,29 @@ public class AirlineDBController {
     }
 
 
-    public ArrayList<SearchResults> listFlights(UserSearch search, Boolean con){
+    public ArrayList<SearchResults> listFlights(UserSearch search, Boolean connectionsOK){
         ArrayList<SearchResults> flightsList = new ArrayList();
-        airlineDB.executeQuery(SQLQueries.createOCview());
-        airlineDB.executeQuery(SQLQueries.createAFview());
-        if (con == false) {
-            ResultSet results = airlineDB.executeQuery(SQLQueries.userSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
-            try {
-                while (results.next()) {
-                    flightsList.add(new SearchResults(results));
-                }
-            } catch (SQLException e) {
-                System.err.println("in listFlights, con == false, SQLException: " + e.getMessage());
-            }
+        airlineDB.executeUpdate(SQLQueries.createOCview());
+        airlineDB.executeUpdate(SQLQueries.createAFview());
+        String userSearchQuery;
+        if (connectionsOK) {
+            userSearchQuery = SQLQueries.selectConFlightsWith(search.getSrc(),
+                    search.getDst(), search.getDepdate());
+        } else {
+            userSearchQuery = SQLQueries.selectFlightsWith(search.getSrc(),
+                    search.getDst(), search.getDepdate());
         }
-        else{
-            ResultSet results = airlineDB.executeQuery(SQLQueries.userCSearchQuery(search.getSrc(), search.getDst(), search.getDepdate()));
-            try {
-                while (results.next()) {
-                    flightsList.add(new SearchResults(results));
-                }
-            } catch (SQLException e) {
-                System.err.println("in listFlights, con == true, SQLException: " + e.getMessage());
+
+        ResultSet results = airlineDB.executeQuery(userSearchQuery);
+        try {
+            while (results.next()) {
+                flightsList.add(new SearchResults(results));
             }
+        } catch (SQLException e) {
+            System.err.println("in listFlights, SQLException: " + e.getMessage());
         }
-        airlineDB.executeQuery(SQLQueries.dropAFview());
-        airlineDB.executeQuery(SQLQueries.dropOCview());
+        airlineDB.executeUpdate(SQLQueries.dropAFview());
+        airlineDB.executeUpdate(SQLQueries.dropOCview());
         return flightsList;
     }
 

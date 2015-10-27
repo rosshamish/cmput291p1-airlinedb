@@ -1,4 +1,7 @@
 package com.cmput291.rhanders_abradsha_dshin;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * Created by ross on 15-10-23.
  */
@@ -9,7 +12,7 @@ public class SQLQueries {
     }
 
     public static String cancelBookingUpdate(String ticketNo, String flightNo, String depDate) {
-        return "";
+        throw new NotImplementedException();
     }
 
     public static String departureUpdate(String time, String flightNo, String depDate) {
@@ -74,7 +77,7 @@ public class SQLQueries {
                 "GROUP BY a1.flightno, a2.flightno, a1.dep_date, a1.src, a2.dst, a2.dep_time, a1.arr_time, " +
                 "LEAST(a1.seats, a2.seats)";
     }
-    public static String userSearchQuery(String src, String dst, String depdate) {
+    public static String selectFlightsWith(String src, String dst, String depdate) {
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
                 "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END as connections, " +
                 "layover, price, seats " +
@@ -89,7 +92,7 @@ public class SQLQueries {
                 "ORDER BY price ASC";
     }
 
-    public static String userCSearchQuery(String src, String dst, String depdate) {
+    public static String selectConFlightsWith(String src, String dst, String depdate) {
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
                 "to_char(arr_time,'HH24:MI') as arr_time, (CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END) as connections, " +
                 "layover, price, seats " +
