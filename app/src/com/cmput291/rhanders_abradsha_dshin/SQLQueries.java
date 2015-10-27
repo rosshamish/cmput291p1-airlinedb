@@ -111,7 +111,7 @@ public class SQLQueries {
     }
 
     public static String ticketupdate(String email, String name, Integer tno, Integer price) {
-        return "INSERT INTO tickets VALUES('" + tno + "','" + name + "'," + email + "," + price +")";
+        return "INSERT INTO tickets VALUES(" + tno + ",'" + name + "','" + email + "'," + price +")";
     }
 
      public static String assertroom() {
