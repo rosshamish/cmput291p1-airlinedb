@@ -90,15 +90,16 @@ public class AirlineDBCommandLineInterface {
         return search;
     }
 
-    public String inputname(String title) {
-        String name;
+    public PassengerDetails inputPassengerDetails(String title) {
+        PassengerDetails p = new PassengerDetails();
         if (title.length() > 0) {
             System.out.println(title);
         }
 
-        name = this.readLine("Name: ");
+        p.name = this.readLine("Name: ");
+        p.country = this.readLine("Country: ");
 
-        return name;
+        return p;
     }
 
     public Credentials inputCredentials(String title) {

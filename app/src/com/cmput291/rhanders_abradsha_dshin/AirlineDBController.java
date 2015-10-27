@@ -85,16 +85,14 @@ public class AirlineDBController {
         return currentUser.getAgent();
     }
 
-    public BookingStatus attemptBookFlight(String name, SearchResults flight){
+    public BookingStatus attemptBookFlight(String name, String country, SearchResults flight){
         ResultSet passengers = airlineDB.executeQuery(SQLQueries.selectPassengersWith(name));
-        try{
-            if(!passengers.next()){
-                ResultSet airline = airlineDB.executeQuery(SQLQueries.getairlines(flight.getSrc()));
-                String country = airline.getString("country");
-                airlineDB.executeQuery(SQLQueries.addPassenger(currentUser.getEmail(), name, country));
+        try {
+            if (!passengers.next()){
+                airlineDB.executeUpdate(SQLQueries.addPassenger(currentUser.getEmail(), name, country));
             }
         } catch (SQLException e){
-            System.err.println("SQLException: " + e.getMessage());
+            System.err.println("in passengers, SQLException: " + e.getMessage());
         }
 
         Boolean validT = false;
@@ -116,10 +114,11 @@ public class AirlineDBController {
         }
 
         try {
-            airlineDB.executeUpdate(SQLQueries.startTran());
+            airlineDB.startTransaction();
+
             ResultSet validseat = airlineDB.executeQuery(SQLQueries.assertroom());
             if (!validseat.next()) {
-                airlineDB.executeUpdate(SQLQueries.finishTran());
+                airlineDB.commitTransaction();
                 return new BookingStatus(BookingStatus.State.FAIL_NO_SEATS);
             }
             airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(flight.getPrice())));
@@ -139,13 +138,12 @@ public class AirlineDBController {
                 airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo2(), fare2, flight.getDepdate(),
                         Integer.valueOf(flight.getSeats())));
             }
-            airlineDB.executeUpdate(SQLQueries.finishTran());
+            airlineDB.commitTransaction();
             return new BookingStatus(tno);
         } catch (Exception e) {
             return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
         }
     }
-
 
     public ArrayList<SearchResults> listFlights(UserSearch search, Boolean connectionsOK){
         ArrayList<SearchResults> flightsList = new ArrayList();
@@ -188,11 +186,11 @@ public class AirlineDBController {
     }
 
     public void deleteBooking(SimpleBooking booking) {
-        //airlineDB.executeUpdate(SQLQueries.startTran());
+        airlineDB.startTransaction();
         airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
                 booking.getFlightNo(), booking.getDepDate()));
         airlineDB.executeUpdate(SQLQueries.cancelTicketUpdate(booking.getTicketNo()));
-        //airlineDB.executeUpdate(SQLQueries.finishTran());
+        airlineDB.commitTransaction();
     }
 
     public Boolean recordDeparture(ScheduledFlight flight) {

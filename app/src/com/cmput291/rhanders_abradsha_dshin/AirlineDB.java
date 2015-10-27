@@ -69,4 +69,20 @@ public class AirlineDB {
         }
         return true;
     }
+
+    public void startTransaction() {
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            System.err.println("in startTransaction, SQLException: " + e.getMessage());
+        }
+    }
+
+    public void commitTransaction() {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            System.err.println("in commitTransaction, SQLException: " + e.getMessage());
+        }
+    }
 }

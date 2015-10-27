@@ -182,8 +182,8 @@ public class AirlineDBConsole {
             return;
         }
 
-        String name = cli.inputname("Please enter your name");
-        BookingStatus bookingStatus = controller.attemptBookFlight(name, flightToBook);
+        PassengerDetails p = cli.inputPassengerDetails("Please enter your passenger details");
+        BookingStatus bookingStatus = controller.attemptBookFlight(p.name, p.country, flightToBook);
         switch (bookingStatus.getState()) {
             case FAIL_NO_SEATS:
                 System.out.println("Booking failed: No seats left");

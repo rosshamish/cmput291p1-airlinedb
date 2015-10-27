@@ -110,14 +110,6 @@ public class SQLQueries {
                 "ORDER BY connections ASC, price ASC";
     }
 
-    public static String startTran() {
-        return "BEGIN TRANSACTION";
-    }
-
-    public static String finishTran() {
-        return "COMMIT";
-    }
-
     public static String assertroom() {
         return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
     }
