@@ -1,8 +1,8 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
+
 import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 /**
  * Created by ross on 15-10-21.
@@ -104,6 +104,7 @@ public class AirlineDBConsole {
     }
 
     private void mainMenu() {
+        System.out.println(); // for prettiness
         if (controller.isAgent()) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.AgentMain);
             switch (choice) {
@@ -178,10 +179,14 @@ public class AirlineDBConsole {
         try {
             flightToBook = (SearchResults)cli.pickObjectFromList(controller.listFlights(search, con),
                     "Select flight to book, or 0 to exit");
-        } catch (InputMismatchException e) {
+        } catch (InvalidChoiceException e) {
             System.out.println("That flight doesn't exist. Exiting.");
             return;
+        } catch (NoChoiceException e) {
+            System.out.println("Exiting.");
+            return;
         }
+
         flightToBook.setDepdate(search.getDepdate());
 
         PassengerDetails p = cli.inputPassengerDetails("Please enter your passenger details");
@@ -214,10 +219,14 @@ public class AirlineDBConsole {
         SimpleBooking booking = null;
         try {
             booking = (SimpleBooking)cli.pickObjectFromList(bookings, "Select booking to modify, or 0 to exit");
-        } catch (InputMismatchException e) {
+        } catch (InvalidChoiceException e) {
             System.out.println("That booking doesn't exist. Exiting.");
             return;
+        } catch (NoChoiceException e) {
+            System.out.println("Exiting.");
+            return;
         }
+
         while(true) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {
