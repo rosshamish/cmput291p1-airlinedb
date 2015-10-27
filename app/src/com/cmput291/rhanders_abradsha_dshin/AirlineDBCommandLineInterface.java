@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.InputMismatchException;
 
 /**
  * Created by ross on 15-10-23.
@@ -48,7 +48,7 @@ public class AirlineDBCommandLineInterface {
         return choice;
     }
 
-    public Object pickObjectFromList(ArrayList<?> objects, String clarification) {
+    public Object pickObjectFromList(ArrayList<?> objects, String clarification) throws InputMismatchException {
         Integer choice = null;
         Integer optNum = 1;
         for (Object opt : objects) {
@@ -58,6 +58,7 @@ public class AirlineDBCommandLineInterface {
         choice = Integer.valueOf(this.readLine(clarification + ">> ")) - 1;
         if (choice < 0 || choice > objects.size()) {
             System.err.println("Invalid option chosen");
+            throw new InputMismatchException();
         }
 
         return objects.get(choice);

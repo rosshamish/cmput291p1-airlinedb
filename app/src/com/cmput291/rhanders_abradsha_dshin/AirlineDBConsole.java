@@ -2,6 +2,7 @@ package com.cmput291.rhanders_abradsha_dshin;
 
 import java.sql.SQLInvalidAuthorizationSpecException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  * Created by ross on 15-10-21.
@@ -171,7 +172,13 @@ public class AirlineDBConsole {
 
     private void makeBooking(UserSearch search, Boolean con) {
         System.out.println(SearchResults.rowDes());
-        SearchResults flightToBook = (SearchResults)cli.pickObjectFromList(controller.listFlights(search, con), "Select flight to book");
+        SearchResults flightToBook = null;
+        try {
+            flightToBook = (SearchResults)cli.pickObjectFromList(controller.listFlights(search, con),
+                    "Select flight to book, or 0 to exit");
+        } catch (InputMismatchException e) {
+            System.out.println("That flight doesn't exist. Exiting.");
+        }
 
         String name = cli.inputname("Please enter your name");
         BookingStatus bookingStatus = controller.attemptBookFlight(name, flightToBook);
@@ -200,7 +207,13 @@ public class AirlineDBConsole {
             return;
         }
         System.out.println(SimpleBooking.rowDescription());
-        SimpleBooking booking = (SimpleBooking)cli.pickObjectFromList(bookings, "Select booking to modify");
+        SimpleBooking booking = null;
+        try {
+            booking = (SimpleBooking)cli.pickObjectFromList(bookings, "Select booking to modify, or 0 to exit");
+        } catch (InputMismatchException e) {
+            System.out.println("That booking doesn't exist. Exiting.");
+            return;
+        }
         while(true) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {
