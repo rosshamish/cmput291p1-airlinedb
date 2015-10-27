@@ -57,8 +57,10 @@ public class AirlineDB {
                     ResultSet.CONCUR_UPDATABLE);
             resultSet = stmt.executeQuery(query);
         } catch (SQLException e) {
-            System.err.printf("---\nWhile executing query\n\n%s\n\n", query);
-            System.err.printf("SQLException: %s\n---\n", e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.printf("---\nWhile executing query\n\n%s\n\n", query);
+                System.err.printf("SQLException: %s\n---\n", e.getMessage());
+            }
             return null;
         }
         return resultSet;
@@ -71,8 +73,10 @@ public class AirlineDB {
                     ResultSet.CONCUR_UPDATABLE);
             stmt.executeUpdate(update);
         } catch (SQLException e) {
-            System.err.printf("---\nWhile executing update\n\n%s\n", update);
-            System.err.printf("SQLException: %s\n", e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.printf("---\nWhile executing update\n\n%s\n", update);
+                System.err.printf("SQLException: %s\n", e.getMessage());
+            }
             throw e;
         }
         return true;
