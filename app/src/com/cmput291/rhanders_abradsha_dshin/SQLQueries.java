@@ -97,7 +97,7 @@ public class SQLQueries {
 
     public static String selectConFlightsWith(String src, String dst, String depdate) {
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
-                "to_char(arr_time,'HH24:MI') as arr_time, (CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END) as connections, " +
+                "to_char(arr_time,'HH24:MI') as arr_time, (CASE WHEN flightno2 IS NULL THEN 0 ELSE 1 END) as connections, " +
                 "layover, price, seats " +
                 "FROM " +
                 "((SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
