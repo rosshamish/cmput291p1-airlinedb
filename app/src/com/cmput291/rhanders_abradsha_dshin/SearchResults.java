@@ -84,7 +84,7 @@ public class SearchResults {
     }
 
     public static String rowDes() {
-        return String.format("   %10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
+        return String.format("     %10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
                 "flightno1", "flightno2", "src", "dst",
                 "dep_time", "arr_time", "connections", "layover",
                 "price", "available_seats");

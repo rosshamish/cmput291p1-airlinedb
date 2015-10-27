@@ -23,7 +23,7 @@ public class AirlineDBCommandLineInterface {
         put(PromptName.Main, new String[]{"Search for Flight", "List Bookings", "Logout"});
         put(PromptName.AgentMain, new String[]{"Search for Flight", "List Bookings",
                 "Record Flight Departure", "Record Flight Arrival", "Logout"});
-        put(PromptName.Bookings, new String[]{"Details", "Delete", "Return to Menu"});
+        put(PromptName.Bookings, new String[]{"See Booking Details", "Delete Booking", "Do Nothing"});
         put(PromptName.Connections, new String[]{"Sort by Price","Sort by Price and Connections"});
     }};
 
@@ -52,7 +52,7 @@ public class AirlineDBCommandLineInterface {
         Integer choice = null;
         Integer optNum = 1;
         for (Object opt : objects) {
-            System.out.printf("%d) %s\n", optNum++, opt.toString());
+            System.out.printf("%03d) %s\n", optNum++, opt.toString());
         }
 
         choice = Integer.valueOf(this.readLine(clarification + ">> ")) - 1;

@@ -38,17 +38,23 @@ public class SimpleBooking {
     }
 
     public static String rowDescription() {
-        return "tno\tname\tdep_date\tpaid_price";
-    }
-
-    public static String descriptiveRowDescription() { return rowDescription() + "\tflightno\tfare\tseat\temail"; }
-
-    public String descriptiveToString() {
-        return this.toString() + "\t" + flightNo + "\t" + fare + "\t" + seat + "\t" + email;
+        return String.format("     %10s|%20s|%20s|%12s|",
+                "tno", "name", "dep_date", "paid_price");
     }
 
     @Override
     public String toString() {
-        return ticketNo + "\t" + passName + "\t" + depDate + "\t" + price;
+        return String.format("%10s|%20s|%20s|%12s|",
+                ticketNo, passName, depDate, price);
+    }
+
+    public static String descriptiveRowDescription() {
+        return rowDescription() + String.format("%10s|%4s|%4s|%30s|",
+                "flightno", "fare", "seat", "email");
+    }
+
+    public String descriptiveToString() {
+        return this.toString() + String.format("%10s|%4s|%4s|%30s|," +
+                flightNo, fare, seat, email);
     }
 }
