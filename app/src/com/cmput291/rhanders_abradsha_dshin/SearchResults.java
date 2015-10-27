@@ -78,7 +78,6 @@ public class SearchResults {
             this.layover = row.getString("layover");
             this.price = row.getString("price");
             this.seats = row.getString("available seats");
-
         } catch (Exception e) {
             System.out.println("oops missed a row");
         }

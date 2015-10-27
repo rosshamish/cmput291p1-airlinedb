@@ -61,39 +61,37 @@ public class SQLQueries {
         return "DROP VIEW one_connection";
     }
     public static String createAFview() {
-        return "CREATE VIEW avail_flights(flightno, dep_date, src, dst, dep_time, arr_time, seats, price) " +
-                "AS SELECT f.flightno, sf.dep_date, f.src, f.dst, f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)), " +
-                "f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24, " +
-                "fa.limit-count(tno), fa.price " +
-                "FROM flights f, flight_fares fa, sch_flights sf, bookings b, airports a1, airports a2 " +
-                "WHERE f.flightno=sf.flightno and f.flightno=fa.flightno and f.src = a1.acode and f.dst = a2.acode " +
-                "and fa.flightno=b.flightno(+) and sf.dep_date = b.dep_date(+) " +
-                "GROUP BY f.flightno, sf.dep_date, f.src, f.dst, f.dep_time, f.est_dur, a2.tzone, a1.tzone, " +
-                "fa.limit, fa.price " +
+        return "CREATE VIEW avail_flights(flightno, dep_date, src, dst, dep_time, arr_time, fare, seats, price) \n" +
+                "AS SELECT f.flightno, sf.dep_date, f.src, f.dst, f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)), \n" +
+                "f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24, \n" +
+                "fa.fare, fa.limit-count(tno), fa.price \n" +
+                "FROM flights f, flight_fares fa, sch_flights sf, bookings b, airports a1, airports a2 \n" +
+                "WHERE f.flightno=sf.flightno and f.flightno=fa.flightno and f.src=a1.acode and f.dst=a2.acode \n" +
+                "and fa.flightno=b.flightno(+) and fa.fare=b.fare(+) and sf.dep_date=b.dep_date(+) \n" +
+                "GROUP BY f.flightno, sf.dep_date, f.src, f.dst, f.dep_time, f.est_dur, a2.tzone, a1.tzone, \n" +
+                "fa.fare, fa.limit, fa.price \n" +
                 "HAVING fa.limit-count(tno) > 0";
     }
 
     public static String createOCview() {
-        return "CREATE VIEW one_connection(flightno1,flightno2,dep_date,src,dst,dep_time,arr_time,layover,price,seats) " +
-                "AS SELECT a1.flightno, a2.flightno, a1.dep_date, a1.src, a2.dst, a1.dep_time, a2.arr_time, " +
-                "a2.dep_time-a1.arr_time, min(a1.price+a2.price), LEAST(a1.seats, a2.seats) " +
-                "FROM avail_flights a1, avail_flights a2 " +
-                "WHERE a1.dst=a2.src " +
-                "GROUP BY a1.flightno, a2.flightno, a1.dep_date, a1.src, a2.dst, a2.dep_time, a1.arr_time, " +
-                "LEAST(a1.seats, a2.seats)";
+        return "CREATE VIEW one_connection(flightno1,flightno2,dep_date,src,dst,dep_time,arr_time,layover,price,seats) \n" +
+                "AS SELECT a1.flightno, a2.flightno, a1.dep_date, a1.src, a2.dst, a1.dep_time, a2.arr_time, \n" +
+                "a2.dep_time-a1.arr_time, a1.price+a2.price, LEAST(a1.seats, a2.seats) \n" +
+                "FROM avail_flights a1, avail_flights a2 \n" +
+                "WHERE a1.dst=a2.src";
     }
     public static String selectFlightsWith(String src, String dst, String depdate) {
-        return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, " +
-                "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN a2.flightno2 IS NULL THEN 0 ELSE 1 END as connections, " +
-                "layover, price, seats " +
-                "FROM " +
-                "((SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats " +
-                "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) " +
-                "UNION" +
-                "(SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats " +
-                "FROM avail_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and " +
-                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "'))) " +
+        return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, \n" +
+                "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN flightno2 IS NULL THEN 0 ELSE 1 END as connections, \n" +
+                "layover, price, seats \n" +
+                "FROM \n" +
+                "((SELECT flightno1, flightno2, src, dst, dep_time, arr_time, layover, price, seats \n" +
+                "FROM one_connection WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and \n" +
+                "lower(src) = lower('" + src + "') and lower(dst) = lower('" + dst + "')) \n" +
+                "UNION \n" +
+                "(SELECT flightno flightno1, '' flightno2, src, dst, dep_time, arr_time, 0 layover, price, seats \n" +
+                "FROM avail_flights WHERE to_char(dep_date,'DD-Mon-YYYY')= '" + depdate + "' and \n" +
+                "lower(src) LIKE lower('" + src + "') and lower(dst) LIKE lower('" + dst + "'))) \n" +
                 "ORDER BY price ASC";
     }
 
