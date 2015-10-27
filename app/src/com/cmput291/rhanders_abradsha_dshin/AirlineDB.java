@@ -4,6 +4,8 @@ import oracle.jdbc.driver.OracleDriver;
 
 import java.sql.*;
 
+import java.lang.Class;
+
 /**
  * Created by ross on 15-10-21.
  */
@@ -23,12 +25,18 @@ public class AirlineDB {
 
     private Boolean connect() {
         try {
-            Driver driver = new OracleDriver();
-            DriverManager.registerDriver(driver);
+            Class driverClass = Class.forName("oracle.jdbc.driver.OracleDriver");
+            DriverManager.registerDriver((Driver) driverClass.newInstance());
             connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPass());
         } catch (SQLException e) {
             System.err.printf("On connect, SQLException: %s\n", e.getMessage());
             return false;
+        } catch (ClassNotFoundException e) {
+            System.err.println("On connect, ClassNotFoundException: " + e.getMessage());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         return true;
     }
