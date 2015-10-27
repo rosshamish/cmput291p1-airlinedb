@@ -1,28 +1,13 @@
 package com.cmput291.rhanders_abradsha_dshin;
+
 import java.sql.ResultSet;
+
 /**
  * Created by bradshawz on 25/10/15.
  */
 public class ScheduledFlight {
 
     private String flightNo;
-
-    public String getFlightNo() {
-        return flightNo;
-    }
-
-    public String getDepDate() {
-        return depDate;
-    }
-
-    public String getActDepTime() {
-        return actDepTime;
-    }
-
-    public String getActArrTime() {
-        return actArrTime;
-    }
-
     private String depDate;
     private String actDepTime;
     private String actArrTime;
@@ -47,6 +32,22 @@ public class ScheduledFlight {
 
     public static String rowDescription() {
         return "flightno\tdep_date\tact_dep_time\tact_arr_time";
+    }
+
+    public String getFlightNo() {
+        return flightNo;
+    }
+
+    public String getDepDate() {
+        return depDate;
+    }
+
+    public String getActDepTime() {
+        return actDepTime;
+    }
+
+    public String getActArrTime() {
+        return actArrTime;
     }
 
     @Override

@@ -10,21 +10,13 @@ import java.util.HashMap;
  * Created by ross on 15-10-23.
  */
 public class AirlineDBCommandLineInterface {
-    public enum PromptName {
-        Login,
-        Main,
-        AgentMain,
-        Bookings,
-        Connections
-    }
-
     private static final HashMap<PromptName, String[]> prompts = new HashMap<PromptName, String[]>() {{
         put(PromptName.Login, new String[]{"Login", "Register", "Exit"});
         put(PromptName.Main, new String[]{"Search for Flight", "List Bookings", "Logout"});
         put(PromptName.AgentMain, new String[]{"Search for Flight", "List Bookings",
                 "Record Flight Departure", "Record Flight Arrival", "Logout"});
         put(PromptName.Bookings, new String[]{"See Booking Details", "Delete Booking", "Do Nothing"});
-        put(PromptName.Connections, new String[]{"Sort by Price","Sort by Price and Connections"});
+        put(PromptName.Connections, new String[]{"Sort by Price", "Sort by Price and Connections"});
     }};
 
     public Integer promptForChoice(PromptName name) {
@@ -150,5 +142,13 @@ public class AirlineDBCommandLineInterface {
         if (System.console() != null)
             return System.console().readPassword(format, args);
         return this.readLine(format, args).toCharArray();
+    }
+
+    public enum PromptName {
+        Login,
+        Main,
+        AgentMain,
+        Bookings,
+        Connections
     }
 }

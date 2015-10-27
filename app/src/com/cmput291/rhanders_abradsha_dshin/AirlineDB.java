@@ -1,10 +1,6 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import oracle.jdbc.driver.OracleDriver;
-
 import java.sql.*;
-
-import java.lang.Class;
 
 /**
  * Created by ross on 15-10-21.
@@ -18,7 +14,9 @@ public class AirlineDB {
     public AirlineDB(Credentials dbCreds) throws SQLInvalidAuthorizationSpecException {
         this.dbCreds = dbCreds;
         if (!this.connect()) {
-            System.err.println("AirlineDB failed to connect to database");
+            if (Debugging.isEnabled()) {
+                System.err.println("AirlineDB failed to connect to database");
+            }
             throw new SQLInvalidAuthorizationSpecException();
         }
     }
@@ -29,10 +27,14 @@ public class AirlineDB {
             DriverManager.registerDriver((Driver) driverClass.newInstance());
             connection = DriverManager.getConnection(db_url, dbCreds.getUser(), dbCreds.getPass());
         } catch (SQLException e) {
-            System.err.printf("On connect, SQLException: %s\n", e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.printf("On connect, SQLException: %s\n", e.getMessage());
+            }
             return false;
         } catch (ClassNotFoundException e) {
-            System.err.println("On connect, ClassNotFoundException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("On connect, ClassNotFoundException: " + e.getMessage());
+            }
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -45,7 +47,9 @@ public class AirlineDB {
         try {
             connection.close();
         } catch (SQLException e) {
-            System.err.printf("On disconnect, SQLException: %s\n", e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.printf("On disconnect, SQLException: %s\n", e.getMessage());
+            }
         }
     }
 
@@ -59,6 +63,8 @@ public class AirlineDB {
         } catch (SQLException e) {
             if (Debugging.isEnabled()) {
                 System.err.printf("---\nWhile executing query\n\n%s\n\n", query);
+            }
+            if (Debugging.isEnabled()) {
                 System.err.printf("SQLException: %s\n---\n", e.getMessage());
             }
             return null;
@@ -75,6 +81,8 @@ public class AirlineDB {
         } catch (SQLException e) {
             if (Debugging.isEnabled()) {
                 System.err.printf("---\nWhile executing update\n\n%s\n", update);
+            }
+            if (Debugging.isEnabled()) {
                 System.err.printf("SQLException: %s\n", e.getMessage());
             }
             throw e;
@@ -86,7 +94,9 @@ public class AirlineDB {
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            System.err.println("in startTransaction, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in startTransaction, SQLException: " + e.getMessage());
+            }
         }
     }
 
@@ -94,7 +104,9 @@ public class AirlineDB {
         try {
             connection.commit();
         } catch (SQLException e) {
-            System.err.println("in commitTransaction, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in commitTransaction, SQLException: " + e.getMessage());
+            }
         }
     }
 
@@ -102,7 +114,9 @@ public class AirlineDB {
         try {
             connection.rollback();
         } catch (SQLException e) {
-            System.err.println("in rollbackTransaction, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in rollbackTransaction, SQLException: " + e.getMessage());
+            }
         }
     }
 }

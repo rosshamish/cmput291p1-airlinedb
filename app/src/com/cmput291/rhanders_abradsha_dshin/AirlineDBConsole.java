@@ -76,7 +76,7 @@ public class AirlineDBConsole {
                 if (controller.userExists(details)) {
                     controller.login(details);
                     System.out.println("\nLogged in as " +
-                            details.getEmail() + (controller.isAgent() ? " (Agent)" : "") );
+                            details.getEmail() + (controller.isAgent() ? " (Agent)" : ""));
                     wasLoginSuccessful = true;
                 } else {
                     System.out.println("Login failed: Invalid credentials");
@@ -160,7 +160,7 @@ public class AirlineDBConsole {
         UserSearch search = cli.inputsearch("Please enter search criteria");
         Boolean con = false;
         Integer choice = cli.promptForChoice((AirlineDBCommandLineInterface.PromptName.Connections));
-        switch (choice){
+        switch (choice) {
             case 0: // Search by price only
                 con = false;
                 makeBooking(search, con);
@@ -177,7 +177,7 @@ public class AirlineDBConsole {
         System.out.println(SearchResults.rowDes());
         SearchResults flightToBook = null;
         try {
-            flightToBook = (SearchResults)cli.pickObjectFromList(controller.listFlights(search, con),
+            flightToBook = (SearchResults) cli.pickObjectFromList(controller.listFlights(search, con),
                     "Select flight to book, or 0 to exit");
         } catch (InvalidChoiceException e) {
             System.out.println("That flight doesn't exist. Exiting.");
@@ -218,7 +218,7 @@ public class AirlineDBConsole {
         System.out.println(SimpleBooking.rowDescription());
         SimpleBooking booking = null;
         try {
-            booking = (SimpleBooking)cli.pickObjectFromList(bookings, "Select booking to modify, or 0 to exit");
+            booking = (SimpleBooking) cli.pickObjectFromList(bookings, "Select booking to modify, or 0 to exit");
         } catch (InvalidChoiceException e) {
             System.out.println("That booking doesn't exist. Exiting.");
             return;
@@ -227,7 +227,7 @@ public class AirlineDBConsole {
             return;
         }
 
-        while(true) {
+        while (true) {
             Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Bookings);
             switch (choice) {
                 case 0: // Booking Details

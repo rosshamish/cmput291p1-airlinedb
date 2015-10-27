@@ -10,8 +10,8 @@ public class SQLQueries {
     }
 
     public static String cancelBookingUpdate(String ticketNo, String flightNo, String depDate) {
-        return "DELETE FROM bookings b WHERE b.tno = "+ ticketNo +" AND " +
-                "b.flightno = '"+ flightNo +"' AND b.dep_date = to_date('"+ depDate +"', 'YYYY-MM-DD')";
+        return "DELETE FROM bookings b WHERE b.tno = " + ticketNo + " AND " +
+                "b.flightno = '" + flightNo + "' AND b.dep_date = to_date('" + depDate + "', 'YYYY-MM-DD')";
     }
 
     public static String cancelTicketUpdate(String ticketNo) {
@@ -42,7 +42,7 @@ public class SQLQueries {
         return "SELECT email FROM users WHERE email ='" + email + "'";
     }
 
-    public static String selectAgentWith(String email){
+    public static String selectAgentWith(String email) {
         return "SELECT email FROM airline_agents WHERE email ='" + email + "'";
     }
 
@@ -55,9 +55,11 @@ public class SQLQueries {
     public static String dropAFview() {
         return "DROP VIEW avail_flights";
     }
+
     public static String dropOCview() {
         return "DROP VIEW one_connection";
     }
+
     public static String createAFview() {
         return "CREATE VIEW avail_flights(flightno, dep_date, src, dst, dep_time, arr_time, fare, seats, price) \n" +
                 "AS SELECT f.flightno, sf.dep_date, f.src, f.dst, f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)), \n" +
@@ -78,6 +80,7 @@ public class SQLQueries {
                 "FROM avail_flights a1, avail_flights a2 \n" +
                 "WHERE a1.dst=a2.src";
     }
+
     public static String selectFlightsWith(String src, String dst, String depdate) {
         return "SELECT flightno1,flightno2,src,dst,to_char(dep_time, 'HH24:MI') as dep_time, \n" +
                 "to_char(arr_time,'HH24:MI') as arr_time, CASE WHEN flightno2 IS NULL THEN 0 ELSE 1 END as connections, \n" +
@@ -109,16 +112,16 @@ public class SQLQueries {
     }
 
     public static String ticketupdate(String email, String name, Integer tno, Integer price) {
-        return "INSERT INTO tickets VALUES(" + tno + ",'" + name + "','" + email + "'," + price +")";
+        return "INSERT INTO tickets VALUES(" + tno + ",'" + name + "','" + email + "'," + price + ")";
     }
 
-     public static String assertroom() {
+    public static String assertroom() {
         return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
     }
 
     public static String bookingupdate(Integer tno, String flightno, String fare, String depdate, Integer seats) {
         return "INSERT INTO bookings VALUES(" + tno + ",'" + flightno + "','" + fare +
-                "', TO_DATE('" + depdate + "','DD-Mon-YYYY'),'" +  seats +"')";
+                "', TO_DATE('" + depdate + "','DD-Mon-YYYY'),'" + seats + "')";
     }
 
     public static String selectPassengersWith(String name) {
