@@ -1,4 +1,6 @@
 
+SHELL := /bin/bash
+
 all: compile jarup build-clean
 	printf '\nJar built successfully.\nRun like: java -jar airlineDB-rhanders-abradsha-dshin.jar\n\n';
 
