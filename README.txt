@@ -144,3 +144,5 @@ Method of coordination for staying on track
 -When showing more details on a booking, show all information in bookings and ticket tables (doesn't show airports, flight info etc.)
 -Functionality for user story 10 and 11 does not exist
 -Can only search by airport code and not by airport name
+
+See Data flow diagram in the root directory.
