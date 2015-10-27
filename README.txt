@@ -29,7 +29,29 @@ Faux airline database exposed as a command-line application
 
 // TODO diagram showing data-flow between components
 
-// TODO Small user guide
+# User Guide
+
+-Run jar
+-Log into database containing flight information
+-Now at log in menu, can either:
+  -Log into program using existing account
+  -Create account which then logs you into that account
+  -Exit application
+-Once logged in as regular user can either:
+  -Choose to book a flight
+    -Enter where you are flying from and to, aswell as the date
+    -Select how you want the flights to be sorted
+    -Select what booking you want to make
+  -List existing bookings
+    -Lists bookings and lets you select one where you can then:
+      -See more information about the booking
+      -Delete the booking
+      -Return to main menu
+  -Log out of account
+-Once logged in as airline agent:
+  -do everything a regular user can do
+  -update a scheduled flight departure time by entering the flight code and departure date
+  -update a scheduled flight arrival time by entering the flight code and departure date
 
 # Detailed design of the software
 
@@ -83,7 +105,7 @@ Work item breakdown
 - system design and construction of the UI skeleton was treated as one work item
 - application functionality was broken down into user stories. Each user story was treated as one work item. Abbreviated user stories are as follows.
   1. as a new user, I can register a username and password combination with the system
-  2. as a new user, I can register a username and password combination with the system
+  2. as an existing user, I can log in using a username and password combination in the system
   3. as a user, I can search for flights by source, dest, and departure date
   4. as a user, after searching, I can book a flight 
   5. as a user, I can list all my existing bookings
@@ -97,7 +119,7 @@ Work item breakdown
 
 Estimate of time spent
 - Ross Anderson (rhanders): TODO hrs
-- Andrew Bradshaw (abradsha): TODO hrs
+- Andrew Bradshaw (abradsha): 16 hrs
 - Daniel Shin (dshin): TODO hrs
 
 Functionality implemented by each member
@@ -117,4 +139,5 @@ Method of coordination for staying on track
 # Any assumptions or design decision extraneous to the specification on eClass
 
 -When showing more details on a booking, show all information in bookings and ticket tables (doesn't show airports, flight info etc.)
-
+-Functionality for user story 10 and 11 does not exist
+-Can only search by airport code and not by airport name
