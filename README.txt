@@ -116,5 +116,5 @@ Method of coordination for staying on track
 
 # Any assumptions or design decision extraneous to the specification on eClass
 
-// TODO list assumptions and design decisions
+-When showing more details on a booking, show all information in bookings and ticket tables (doesn't show airports, flight info etc.)
 
