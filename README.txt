@@ -6,11 +6,11 @@ CLI for a faux airline database
 
 Build Instructions:
 
-// TODO build instructions
+`$ make`
 
 Run Instructions:
 
-// TODO run instructions
+`$ java -jar airlineDB-rhanders-abradsha-dshin.jar`
 
 Attribution:
 
@@ -61,7 +61,6 @@ Responsibilities and interfaces of primary classes, including relationships betw
 - Database class, AirlineDB. It's responsible for connecting to, disconnecting from, and performing queries on the database.
 - Command Line Interface (CLI) class, AirlineDBCommandLineInterface. It's responsible for user input. Controller delegates user input tasks to this class.
 - SQL queries class, SQLQueries. It's responsible for defining and managing access to SQL query strings. 
-- 
 
 # Testing strategy
 
@@ -125,6 +124,8 @@ Estimate of time spent
 Functionality implemented by each member
 - Ross Anderson (rhanders)
   - system design and construction of the UI skeleton (75%)
+  - completion of user stories 3, 4
+  - bugfixing
   - design document
 - Andrew Bradshaw (abradsha)
   - system design and construction of the UI skeleton (25%)
@@ -134,7 +135,7 @@ Functionality implemented by each member
 
 Method of coordination for staying on track
 - Facebook messenger group thread for communication
-- Github repository for sharing the code
+- Github repository for code sharing
 
 # Any assumptions or design decision extraneous to the specification on eClass
 
