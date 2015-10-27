@@ -10,7 +10,7 @@ Build Instructions:
 
 Run Instructions:
 
-`$ java -jar airlineDB-rhanders-abradsha-dshin.jar`
+`$ make run`
 
 Attribution:
 
@@ -117,21 +117,23 @@ Work item breakdown
 - design document was treated as one work item
 
 Estimate of time spent
-- Ross Anderson (rhanders): TODO hrs
-- Andrew Bradshaw (abradsha): 16 hrs
-- Daniel Shin (dshin): TODO hrs
+- Ross Anderson (rhanders): 15-20 hrs
+- Andrew Bradshaw (abradsha): 15-20 hrs
+- Daniel Shin (dshin): 15-20 hrs
 
 Functionality implemented by each member
 - Ross Anderson (rhanders)
   - system design and construction of the UI skeleton (75%)
   - completion of user stories 3, 4
-  - bugfixing
-  - design document
+  - makefile
+  - design document: detailed design of the software, group work break-down strategy
 - Andrew Bradshaw (abradsha)
   - system design and construction of the UI skeleton (25%)
+  - design document: user guide, testing strategy, assumptions
   - user stories 5, 6, 7, 8, 9
 - Daniel Shin (dshin)
   - user stories 1, 2, 3, 4
+  - design document: data flow diagram
 
 Method of coordination for staying on track
 - Facebook messenger group thread for communication
