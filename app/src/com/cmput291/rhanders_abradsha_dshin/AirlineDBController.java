@@ -20,10 +20,17 @@ public class AirlineDBController {
             System.err.println("AirlineDBController failed to connect to database");
             throw e;
         }
-        airlineDB.executeUpdate(SQLQueries.dropAFview());
-        airlineDB.executeUpdate(SQLQueries.dropOCview());
-        airlineDB.executeUpdate(SQLQueries.createAFview());
-        airlineDB.executeUpdate(SQLQueries.createOCview());
+        try {
+            airlineDB.executeUpdate(SQLQueries.dropAFview());
+            airlineDB.executeUpdate(SQLQueries.dropOCview());
+        } catch (Exception e ) { }
+
+        try {
+            airlineDB.executeUpdate(SQLQueries.createAFview());
+            airlineDB.executeUpdate(SQLQueries.createOCview());
+        } catch (SQLException e) {
+            System.err.println("creating views, SQLException: " + e.getMessage());
+        }
     }
 
     public void disconnect() {
@@ -37,8 +44,12 @@ public class AirlineDBController {
             return;
         }
 
-        airlineDB.executeUpdate(SQLQueries.userUpdate(newUserDetails.getEmail(),
-                newUserDetails.getPass()));
+        try {
+            airlineDB.executeUpdate(SQLQueries.userUpdate(newUserDetails.getEmail(),
+                    newUserDetails.getPass()));
+        } catch (SQLException e) {
+            System.err.println("register, SQLException: " + e.getMessage());
+        }
     }
 
     public boolean userExists(UserDetails details) {
@@ -77,7 +88,11 @@ public class AirlineDBController {
     public Boolean logout() {
         String email = currentUser.getEmail();
         currentUser = null;
-        airlineDB.executeUpdate(SQLQueries.updateLastLogin(email));
+        try {
+            airlineDB.executeUpdate(SQLQueries.updateLastLogin(email));
+        } catch (SQLException e) {
+            System.err.println("logout, SQLException: " + e.getMessage());
+        }
         return true;
     }
 
@@ -124,29 +139,29 @@ public class AirlineDBController {
 //             }
 
             airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(flight.getPrice())));
+
             ResultSet fares1 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo1()));
+            fares1.next();
             String fare1 = fares1.getString("fare");
-            ResultSet fares2 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo2()));
-            String fare2 = fares2.getString("fare");
 
-            if (flight.getFlightNo2()==null){
-                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo1(), fare1, flight.getDepdate(),
-                        Integer.valueOf(flight.getSeats())));
+            airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo1(), fare1, flight.getDepdate(),
+                    Integer.valueOf(flight.getSeats())));
 
-            }
-            else{
-                airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo1(), fare1, flight.getDepdate(),
-                        Integer.valueOf(flight.getSeats())));
+            if (flight.getFlightNo2() != null){
+                ResultSet fares2 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo2()));
+                String fare2 = fares2.getString("fare");
                 airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo2(), fare2, flight.getDepdate(),
                         Integer.valueOf(flight.getSeats())));
             }
 
-            return new BookingStatus(tno);
-        } catch (Exception e) {
-            return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
-        } finally {
             airlineDB.commitTransaction();
+        } catch (Exception e) {
+            System.err.println("attemptBookFlight, Exception: " + e.getMessage());
+
+            airlineDB.rollbackTransaction();
+            return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
         }
+        return new BookingStatus(tno);
     }
 
     public ArrayList<SearchResults> listFlights(UserSearch search, Boolean connectionsOK){
@@ -171,11 +186,6 @@ public class AirlineDBController {
         return flightsList;
     }
 
-    public Boolean recordArrival(ScheduledFlight flight) {
-            return airlineDB.executeUpdate(SQLQueries.
-                    arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
-    }
-
     public ArrayList<SimpleBooking> listBookings() {
         ArrayList<SimpleBooking> bookings = new ArrayList();
         ResultSet results = airlineDB.executeQuery(SQLQueries.userBookingsQuery(currentUser.getEmail()));
@@ -191,14 +201,33 @@ public class AirlineDBController {
 
     public void deleteBooking(SimpleBooking booking) {
         airlineDB.startTransaction();
-        airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
-                booking.getFlightNo(), booking.getDepDate()));
-        airlineDB.executeUpdate(SQLQueries.cancelTicketUpdate(booking.getTicketNo()));
-        airlineDB.commitTransaction();
+        try {
+            airlineDB.executeUpdate(SQLQueries.cancelBookingUpdate(booking.getTicketNo(),
+                    booking.getFlightNo(), booking.getDepDate()));
+            airlineDB.executeUpdate(SQLQueries.cancelTicketUpdate(booking.getTicketNo()));
+            airlineDB.commitTransaction();
+        } catch (SQLException e) {
+            airlineDB.rollbackTransaction();
+        }
+    }
+
+    public Boolean recordArrival(ScheduledFlight flight) {
+        try {
+            return airlineDB.executeUpdate(SQLQueries.
+                    arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
+        } catch (SQLException e) {
+            System.err.println("recordArrival, SQLException: " + e.getMessage());
+            return false;
+        }
     }
 
     public Boolean recordDeparture(ScheduledFlight flight) {
-        return airlineDB.executeUpdate(SQLQueries.
-                    departureUpdate(flight.getActDepTime(), flight.getFlightNo(), flight.getDepDate()));
+        try {
+            return airlineDB.executeUpdate(SQLQueries.
+                        departureUpdate(flight.getActDepTime(), flight.getFlightNo(), flight.getDepDate()));
+        } catch (SQLException e) {
+            System.err.println("recordDeparture, SQLException: " + e.getMessage());
+            return false;
+        }
     }
 }

@@ -118,9 +118,9 @@ public class SQLQueries {
         return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
     }
 
-    public static String bookingupdate(Integer tno, String flightno, String fare,String depdate, Integer seats) {
+    public static String bookingupdate(Integer tno, String flightno, String fare, String depdate, Integer seats) {
         return "INSERT INTO bookings VALUES(" + tno + ",'" + flightno + "','" + fare +
-                "', TO_DATE('" + depdate + "','DD-Mon-YYYY')," +  seats +")";
+                "', TO_DATE('" + depdate + "','DD-Mon-YYYY'),'" +  seats +"')";
     }
 
     public static String selectPassengersWith(String name) {

@@ -181,6 +181,7 @@ public class AirlineDBConsole {
             System.out.println("That flight doesn't exist. Exiting.");
             return;
         }
+        flightToBook.setDepdate(search.getDepdate());
 
         PassengerDetails p = cli.inputPassengerDetails("Please enter your passenger details");
         BookingStatus bookingStatus = controller.attemptBookFlight(p.name, p.country, flightToBook);

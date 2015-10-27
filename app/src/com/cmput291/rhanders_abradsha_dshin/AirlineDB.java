@@ -56,7 +56,7 @@ public class AirlineDB {
         return resultSet;
     }
 
-    public Boolean executeUpdate(String update) {
+    public Boolean executeUpdate(String update) throws SQLException {
         try {
             Statement stmt = connection.createStatement(
                     ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -65,7 +65,7 @@ public class AirlineDB {
         } catch (SQLException e) {
             System.err.printf("---\nWhile executing update\n\n%s\n", update);
             System.err.printf("SQLException: %s\n", e.getMessage());
-            return false;
+            throw e;
         }
         return true;
     }
@@ -83,6 +83,14 @@ public class AirlineDB {
             connection.commit();
         } catch (SQLException e) {
             System.err.println("in commitTransaction, SQLException: " + e.getMessage());
+        }
+    }
+
+    public void rollbackTransaction() {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            System.err.println("in rollbackTransaction, SQLException: " + e.getMessage());
         }
     }
 }

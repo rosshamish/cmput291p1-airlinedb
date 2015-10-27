@@ -77,14 +77,14 @@ public class SearchResults {
             this.stops = row.getString("connections");
             this.layover = row.getString("layover");
             this.price = row.getString("price");
-            this.seats = row.getString("available seats");
+            this.seats = row.getString("seats");
         } catch (Exception e) {
             System.out.println("oops missed a row");
         }
     }
 
     public static String rowDes() {
-        return "flightno1\tflightno2\tsrc\tdst\tdep_time\tarr_time\tconnections\tlayover\tprice\tavailable seats";
+        return "flightno1\tflightno2\tsrc\tdst\tdep_time\tarr_time\tconnections\tlayover\tprice\tavailable_seats";
     }
 
     @Override
