@@ -1,7 +1,5 @@
 package com.cmput291.rhanders_abradsha_dshin;
 
-import java.util.Date;
-
 /**
  * Created by ross on 15-10-23.
  */
@@ -26,7 +24,11 @@ public class UserDetails {
         this.pass = pass;
     }
 
-    public Boolean getAgent() { return agent; }
+    public Boolean getAgent() {
+        return agent;
+    }
 
-    public void setAgent(Boolean agent) { this.agent = agent; }
+    public void setAgent(Boolean agent) {
+        this.agent = agent;
+    }
 }

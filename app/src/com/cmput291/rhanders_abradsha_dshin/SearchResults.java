@@ -19,17 +19,50 @@ public class SearchResults {
     private String price;
     private String seats;
 
+    public SearchResults(ResultSet row) {
+        try {
+            this.flightNo1 = row.getString("flightno1");
+            this.flightNo2 = row.getString("flightno2");
+            this.src = row.getString("src");
+            this.dst = row.getString("dst");
+            this.actDepTime = row.getString("dep_time");
+            this.actArrTime = row.getString("arr_time");
+            this.stops = row.getString("connections");
+            this.layover = row.getString("layover");
+            this.price = row.getString("price");
+            this.seats = row.getString("seats");
+        } catch (Exception e) {
+            System.out.println("oops missed a row");
+        }
+    }
+
+    public static String rowDes() {
+        return String.format("     %10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
+                "flightno1", "flightno2", "src", "dst",
+                "dep_time", "arr_time", "connections", "layover",
+                "price", "available_seats");
+    }
+
     public String getSrc() {
         return src;
     }
-    public void setSrc(String src) {this.src = src;}
 
-    public String getDst() {return dst;}
+    public void setSrc(String src) {
+        this.src = src;
+    }
+
+    public String getDst() {
+        return dst;
+    }
+
     public void setDst(String dst) {
         this.dst = dst;
     }
 
-    public String getDepdate() {return depdate;}
+    public String getDepdate() {
+        return depdate;
+    }
+
     public void setDepdate(String depdate) {
         this.depdate = depdate;
     }
@@ -64,30 +97,6 @@ public class SearchResults {
 
     public String getSeats() {
         return seats;
-    }
-
-    public SearchResults(ResultSet row) {
-        try {
-            this.flightNo1 = row.getString("flightno1");
-            this.flightNo2 = row.getString("flightno2");
-            this.src = row.getString("src");
-            this.dst = row.getString("dst");
-            this.actDepTime = row.getString("dep_time");
-            this.actArrTime = row.getString("arr_time");
-            this.stops = row.getString("connections");
-            this.layover = row.getString("layover");
-            this.price = row.getString("price");
-            this.seats = row.getString("seats");
-        } catch (Exception e) {
-            System.out.println("oops missed a row");
-        }
-    }
-
-    public static String rowDes() {
-        return String.format("     %10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
-                "flightno1", "flightno2", "src", "dst",
-                "dep_time", "arr_time", "connections", "layover",
-                "price", "available_seats");
     }
 
     @Override
