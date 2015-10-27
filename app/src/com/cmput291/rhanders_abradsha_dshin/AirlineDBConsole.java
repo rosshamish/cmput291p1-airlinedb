@@ -76,7 +76,7 @@ public class AirlineDBConsole {
                 if (controller.userExists(details)) {
                     controller.login(details);
                     System.out.println("\nLogged in as " +
-                            (controller.isAgent() ? "AGENT:" : "") + details.getEmail());
+                            details.getEmail() + (controller.isAgent() ? " (Agent)" : "") );
                     wasLoginSuccessful = true;
                 } else {
                     System.out.println("Login failed: Invalid credentials");

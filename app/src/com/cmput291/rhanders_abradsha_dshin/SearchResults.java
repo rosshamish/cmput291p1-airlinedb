@@ -84,12 +84,17 @@ public class SearchResults {
     }
 
     public static String rowDes() {
-        return "flightno1\tflightno2\tsrc\tdst\tdep_time\tarr_time\tconnections\tlayover\tprice\tavailable_seats";
+        return String.format("   %10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
+                "flightno1", "flightno2", "src", "dst",
+                "dep_time", "arr_time", "connections", "layover",
+                "price", "available_seats");
     }
 
     @Override
     public String toString() {
-        return flightNo1 + "\t" + flightNo2 + "\t" + src + "\t" + dst + "\t" + actArrTime + "\t" + actDepTime
-                + "\t" + stops + "\t" + layover + "\t" + price + "\t" + seats;
+        return String.format("%10s|%10s|%4s|%4s|%10s|%10s|%15s|%10s|%7s|%16s|",
+                flightNo1, flightNo2, src, dst,
+                actArrTime, actDepTime, stops, layover,
+                price, seats);
     }
 }
