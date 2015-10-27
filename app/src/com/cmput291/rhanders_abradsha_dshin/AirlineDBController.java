@@ -17,7 +17,9 @@ public class AirlineDBController {
         try {
             airlineDB = new AirlineDB(dbCreds);
         } catch (SQLInvalidAuthorizationSpecException e) {
-            System.err.println("AirlineDBController failed to connect to database");
+            if (Debugging.isEnabled()) {
+                System.err.println("AirlineDBController failed to connect to database");
+            }
             throw e;
         }
         try {
@@ -30,7 +32,9 @@ public class AirlineDBController {
             airlineDB.executeUpdate(SQLQueries.createAFview());
             airlineDB.executeUpdate(SQLQueries.createOCview());
         } catch (SQLException e) {
-            System.err.println("creating views, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("creating views, SQLException: " + e.getMessage());
+            }
         }
     }
 
@@ -54,7 +58,9 @@ public class AirlineDBController {
             airlineDB.executeUpdate(SQLQueries.userUpdate(newUserDetails.getEmail(),
                     newUserDetails.getPass()));
         } catch (SQLException e) {
-            System.err.println("register, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("register, SQLException: " + e.getMessage());
+            }
         }
     }
 
@@ -73,7 +79,9 @@ public class AirlineDBController {
                 details.setAgent(true);
             }
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("SQLException: " + e.getMessage());
+            }
         }
 
         return true;
@@ -90,7 +98,9 @@ public class AirlineDBController {
                 details.setAgent(true);
             }
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("SQLException: " + e.getMessage());
+            }
         }
         currentUser = details;
     }
@@ -105,7 +115,9 @@ public class AirlineDBController {
         try {
             airlineDB.executeUpdate(SQLQueries.updateLastLogin(email));
         } catch (SQLException e) {
-            System.err.println("logout, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("logout, SQLException: " + e.getMessage());
+            }
         }
         return true;
     }
@@ -121,7 +133,9 @@ public class AirlineDBController {
                 airlineDB.executeUpdate(SQLQueries.addPassenger(currentUser.getEmail(), name, country));
             }
         } catch (SQLException e) {
-            System.err.println("in passengers, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in passengers, SQLException: " + e.getMessage());
+            }
         }
 
         Boolean validT = false;
@@ -137,7 +151,9 @@ public class AirlineDBController {
                 }
 
             } catch (SQLException e) {
-                System.err.println("SQLException: " + e.getMessage());
+                if (Debugging.isEnabled()) {
+                    System.err.println("SQLException: " + e.getMessage());
+                }
             }
         }
 
@@ -169,7 +185,9 @@ public class AirlineDBController {
 
             airlineDB.commitTransaction();
         } catch (Exception e) {
-            System.err.println("attemptBookFlight, Exception: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("attemptBookFlight, Exception: " + e.getMessage());
+            }
 
             airlineDB.rollbackTransaction();
             return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
@@ -194,7 +212,9 @@ public class AirlineDBController {
                 flightsList.add(new SearchResults(results));
             }
         } catch (SQLException e) {
-            System.err.println("in listFlights, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in listFlights, SQLException: " + e.getMessage());
+            }
         }
         return flightsList;
     }
@@ -207,7 +227,9 @@ public class AirlineDBController {
                 bookings.add(new SimpleBooking(results));
             }
         } catch (SQLException e) {
-            System.err.println("in listBookings, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("in listBookings, SQLException: " + e.getMessage());
+            }
         }
         return bookings;
     }
@@ -229,7 +251,9 @@ public class AirlineDBController {
             return airlineDB.executeUpdate(SQLQueries.
                     arrivalUpdate(flight.getActArrTime(), flight.getFlightNo(), flight.getDepDate()));
         } catch (SQLException e) {
-            System.err.println("recordArrival, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("recordArrival, SQLException: " + e.getMessage());
+            }
             return false;
         }
     }
@@ -239,7 +263,9 @@ public class AirlineDBController {
             return airlineDB.executeUpdate(SQLQueries.
                     departureUpdate(flight.getActDepTime(), flight.getFlightNo(), flight.getDepDate()));
         } catch (SQLException e) {
-            System.err.println("recordDeparture, SQLException: " + e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.println("recordDeparture, SQLException: " + e.getMessage());
+            }
             return false;
         }
     }

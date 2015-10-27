@@ -6,6 +6,7 @@ package com.cmput291.rhanders_abradsha_dshin;
 public class BookingStatus {
     private State state;
     private int ticketNo;
+
     // Use for an unsuccessful booking
     public BookingStatus(State state) {
         this.state = state;

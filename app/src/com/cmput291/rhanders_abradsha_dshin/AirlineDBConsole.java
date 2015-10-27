@@ -25,7 +25,9 @@ public class AirlineDBConsole {
         try {
             connect();
         } catch (SQLInvalidAuthorizationSpecException e) {
-            System.err.println("AirlineDBConsole failed to connect to database");
+            if (Debugging.isEnabled()) {
+                System.err.println("AirlineDBConsole failed to connect to database");
+            }
             System.exit(0);
         }
         while (!userWantsExit) {
