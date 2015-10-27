@@ -66,7 +66,7 @@ public class AirlineDBConsole {
      */
     private Boolean login() {
         Boolean wasLoginSuccessful = false;
-
+        System.out.println(); // for prettiness
         Integer choice = cli.promptForChoice(AirlineDBCommandLineInterface.PromptName.Login);
         switch (choice) {
             case 0: // Login
