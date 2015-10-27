@@ -145,8 +145,6 @@ public class AirlineDBController {
 
     public ArrayList<SearchResults> listFlights(UserSearch search, Boolean connectionsOK){
         ArrayList<SearchResults> flightsList = new ArrayList();
-        airlineDB.executeUpdate(SQLQueries.dropAFview());
-        airlineDB.executeUpdate(SQLQueries.dropOCview());
 
         airlineDB.executeUpdate(SQLQueries.createAFview());
         airlineDB.executeUpdate(SQLQueries.createOCview());
