@@ -111,7 +111,7 @@ public class SQLQueries {
     }
 
     public static String startTran() {
-        return "START TRANSACTION";
+        return "BEGIN TRANSACTION";
     }
 
     public static String finishTran() {
