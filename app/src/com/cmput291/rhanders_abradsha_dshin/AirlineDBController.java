@@ -20,6 +20,10 @@ public class AirlineDBController {
             System.err.println("AirlineDBController failed to connect to database");
             throw e;
         }
+        airlineDB.executeUpdate(SQLQueries.dropAFview());
+        airlineDB.executeUpdate(SQLQueries.dropOCview());
+        airlineDB.executeUpdate(SQLQueries.createAFview());
+        airlineDB.executeUpdate(SQLQueries.createOCview());
     }
 
     public void disconnect() {
@@ -145,10 +149,6 @@ public class AirlineDBController {
 
     public ArrayList<SearchResults> listFlights(UserSearch search, Boolean connectionsOK){
         ArrayList<SearchResults> flightsList = new ArrayList();
-
-        airlineDB.executeUpdate(SQLQueries.createAFview());
-        airlineDB.executeUpdate(SQLQueries.createOCview());
-
         String userSearchQuery;
         if (connectionsOK) {
             userSearchQuery = SQLQueries.selectConFlightsWith(search.getSrc(),
@@ -166,8 +166,6 @@ public class AirlineDBController {
         } catch (SQLException e) {
             System.err.println("in listFlights, SQLException: " + e.getMessage());
         }
-        airlineDB.executeUpdate(SQLQueries.dropAFview());
-        airlineDB.executeUpdate(SQLQueries.dropOCview());
         return flightsList;
     }
 

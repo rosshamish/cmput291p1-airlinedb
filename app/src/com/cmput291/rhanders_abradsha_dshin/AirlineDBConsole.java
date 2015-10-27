@@ -160,6 +160,7 @@ public class AirlineDBConsole {
         Integer choice = cli.promptForChoice((AirlineDBCommandLineInterface.PromptName.Connections));
         switch (choice){
             case 0: // Search by price only
+                con = false;
                 makeBooking(search, con);
                 break;
             case 1: //search by price and connections
@@ -178,6 +179,7 @@ public class AirlineDBConsole {
                     "Select flight to book, or 0 to exit");
         } catch (InputMismatchException e) {
             System.out.println("That flight doesn't exist. Exiting.");
+            return;
         }
 
         String name = cli.inputname("Please enter your name");

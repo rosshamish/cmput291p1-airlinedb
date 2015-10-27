@@ -57,7 +57,6 @@ public class AirlineDBCommandLineInterface {
 
         choice = Integer.valueOf(this.readLine(clarification + ">> ")) - 1;
         if (choice < 0 || choice > objects.size()) {
-            System.err.println("Invalid option chosen");
             throw new InputMismatchException();
         }
 
