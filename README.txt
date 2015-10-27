@@ -43,10 +43,39 @@ Responsibilities and interfaces of primary classes, including relationships betw
 
 # Testing strategy
 
-// TODO scenarios being tested
-// TODO test case coverage
-// TODO number of bugs found during testing
-// TODO nature of bugs found during testing
+Strategy:
+
+-Populate tables with data from assignment 2 and insert a few tickets, users, bookings and airline agents into the respective tables.
+-Check if can log into existing user, as well as airline agent
+-Check if can register new user and then be logged in
+-Check if pre-existing bookings exist in list bookings
+-Check more detail on the bookings
+-Delete all the bookings
+-Try to list bookings when it's empty
+-Make booking by selecting a flight from city to city
+-Make booking by selecting a flight from airport code to airport code
+-List bookings, make sure both exist
+-Change the arrival time of flight and make sure its changed
+-Change the departure time of flight and make sure its changed
+-Log out of user and make sure time gets set
+-Exit application
+
+Coverage:
+
+Test cases cover required usages of the application. Test cases assume user is not being malicious or entering improper
+data/suggestions (Does not cover user not following required inputs such as dates or numbers, or user sql injecting)
+
+Number of Bugs: 9
+Nature of Bug:
+-Program crashes when signing up pre-existing user
+-Program crashes when logging out from failed sql query (user data was lost before query performed)
+-Program crashes when trying to log in as non-existant user
+-Program doesn't print column names and values together
+-Program crashes when selecting flight
+-Program crashes when signing in to database
+-Program hangs when signing in to database
+-Program can't load oracles driver (can't find .jar or .zip in classpath)
+-Program crashes when typing values that arn't the prompted values
 
 # Group work break-down strategy
 
