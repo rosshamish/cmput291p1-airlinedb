@@ -27,9 +27,9 @@ Enum of Strings in Java
 High-level intro
 Faux airline database exposed as a command-line application
 
-// TODO diagram showing data-flow between components
+See Data flow diagram in the root directory: DataFlow.jpeg
 
-# User Guide
+User Guide
 
 -Run jar
 -Log into database containing flight information
@@ -144,5 +144,3 @@ Method of coordination for staying on track
 -When showing more details on a booking, show all information in bookings and ticket tables (doesn't show airports, flight info etc.)
 -Functionality for user story 10 and 11 does not exist
 -Can only search by airport code and not by airport name
-
-See Data flow diagram in the root directory.
