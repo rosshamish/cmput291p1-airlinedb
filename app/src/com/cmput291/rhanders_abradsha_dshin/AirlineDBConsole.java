@@ -75,7 +75,8 @@ public class AirlineDBConsole {
 
                 if (controller.userExists(details)) {
                     controller.login(details);
-                    System.out.println("Logged in as " + details.getEmail());
+                    System.out.println("\nLogged in as " +
+                            (controller.isAgent() ? "AGENT:" : "") + details.getEmail());
                     wasLoginSuccessful = true;
                 } else {
                     System.out.println("Login failed: Invalid credentials");
@@ -91,7 +92,7 @@ public class AirlineDBConsole {
                     controller.register(newUserDetails);
                     System.out.println("Registration succeeded");
                     controller.login(newUserDetails);
-                    System.out.println("Logged in as " + newUserDetails.getEmail());
+                    System.out.println("\nLogged in as " + newUserDetails.getEmail());
                     wasLoginSuccessful = true;
                 }
                 break;

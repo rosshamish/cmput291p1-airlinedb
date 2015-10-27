@@ -78,6 +78,14 @@ public class AirlineDBController {
     }
 
     public void login(UserDetails details) {
+        ResultSet aresults = airlineDB.executeQuery(SQLQueries.selectAgentWith(details.getEmail()));
+        try {
+            if (aresults.next()) {
+                details.setAgent(true);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
         currentUser = details;
     }
 
