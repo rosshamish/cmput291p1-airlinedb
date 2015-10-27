@@ -21,8 +21,8 @@ public class AirlineDBController {
             throw e;
         }
         try {
-            airlineDB.executeUpdate(SQLQueries.dropAFview());
-            airlineDB.executeUpdate(SQLQueries.dropOCview());
+            //airlineDB.executeUpdate(SQLQueries.dropAFview());
+            //airlineDB.executeUpdate(SQLQueries.dropOCview());
         } catch (Exception e ) { }
 
         try {
@@ -34,6 +34,10 @@ public class AirlineDBController {
     }
 
     public void disconnect() {
+        try {
+            airlineDB.executeUpdate(SQLQueries.dropAFview());
+            airlineDB.executeUpdate(SQLQueries.dropOCview());
+        } catch (Exception e ) { }
         airlineDB.disconnect();
     }
 
