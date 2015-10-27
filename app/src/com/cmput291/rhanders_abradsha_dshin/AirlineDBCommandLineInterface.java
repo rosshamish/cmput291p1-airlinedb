@@ -22,7 +22,9 @@ public class AirlineDBCommandLineInterface {
     public Integer promptForChoice(PromptName name) {
         Integer choice = null;
         if (!prompts.containsKey(name)) {
-            System.err.println("CLI does not contain prompt with name " + name);
+            if (Debugging.isEnabled()) {
+                System.err.println("CLI does not contain prompt with name " + name);
+            }
             return null;
         }
 
@@ -33,7 +35,9 @@ public class AirlineDBCommandLineInterface {
 
         choice = Integer.valueOf(this.readLine(">> ")) - 1;
         if (choice < 0 || choice > prompts.get(name).length) {
-            System.err.println("Invalid option chosen");
+            if (Debugging.isEnabled()) {
+                System.err.println("Invalid option chosen");
+            }
         }
 
         return choice;
@@ -133,7 +137,9 @@ public class AirlineDBCommandLineInterface {
         try {
             return reader.readLine();
         } catch (IOException e) {
-            System.err.printf("readLine IOException: %s", e.getMessage());
+            if (Debugging.isEnabled()) {
+                System.err.printf("readLine IOException: %s", e.getMessage());
+            }
         }
         return "NULL";
     }
