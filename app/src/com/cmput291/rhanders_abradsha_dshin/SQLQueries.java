@@ -55,10 +55,10 @@ public class SQLQueries {
     //TODO: used http://stackoverflow.com/questions/14962970/sql-query-if-value-is-null-then-return-1 for case
     //TODO: used the assignment 2 sql statements solutions as reference (especially the views) credit to drafiei
     public static String dropAFview() {
-        return "DROP table avail_flights";
+        return "DROP VIEW avail_flights";
     }
     public static String dropOCview() {
-        return "DROP table one_connection";
+        return "DROP VIEW one_connection";
     }
     public static String createAFview() {
         return "CREATE VIEW avail_flights(flightno, dep_date, src, dst, dep_time, arr_time, seats, price) " +
