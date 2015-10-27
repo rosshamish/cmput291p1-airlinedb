@@ -68,3 +68,4 @@ fabric.properties
 ## Custom
 ## ------
 app/out/artifacts
+testlog.out

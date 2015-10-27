@@ -110,12 +110,12 @@ public class SQLQueries {
                 "ORDER BY connections ASC, price ASC";
     }
 
-    public static String assertroom() {
-        return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
+    public static String ticketupdate(String email, String name, Integer tno, Integer price) {
+        return "INSERT INTO tickets VALUES('" + tno + "','" + name + "'," + email + "," + price +")";
     }
 
-    public static String ticketupdate(String email, String name, Integer tno, Integer price) {
-        return "INSERT INTO tickets VALUES('" + email + "','" + name + "'," + tno + "," + price +")";
+     public static String assertroom() {
+        return "SELECT tno FROM flight_fares fa, bookings WHERE fa.limit-count(tno) > 0";
     }
 
     public static String bookingupdate(Integer tno, String flightno, String fare,String depdate, Integer seats) {

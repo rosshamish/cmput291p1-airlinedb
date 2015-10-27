@@ -116,11 +116,13 @@ public class AirlineDBController {
         try {
             airlineDB.startTransaction();
 
-            ResultSet validseat = airlineDB.executeQuery(SQLQueries.assertroom());
-            if (!validseat.next()) {
-                airlineDB.commitTransaction();
-                return new BookingStatus(BookingStatus.State.FAIL_NO_SEATS);
-            }
+            // TODO make this query work
+//             ResultSet validseat = airlineDB.executeQuery(SQLQueries.assertroom());
+//             if (!validseat.next()) {
+//                 airlineDB.commitTransaction();
+//                 return new BookingStatus(BookingStatus.State.FAIL_NO_SEATS);
+//             }
+
             airlineDB.executeUpdate(SQLQueries.ticketupdate(currentUser.getEmail(),name, tno, Integer.valueOf(flight.getPrice())));
             ResultSet fares1 = airlineDB.executeQuery(SQLQueries.getfare(flight.getFlightNo1()));
             String fare1 = fares1.getString("fare");
@@ -138,10 +140,12 @@ public class AirlineDBController {
                 airlineDB.executeUpdate(SQLQueries.bookingupdate(tno, flight.getFlightNo2(), fare2, flight.getDepdate(),
                         Integer.valueOf(flight.getSeats())));
             }
-            airlineDB.commitTransaction();
+
             return new BookingStatus(tno);
         } catch (Exception e) {
             return new BookingStatus(BookingStatus.State.FAIL_NO_REASON);
+        } finally {
+            airlineDB.commitTransaction();
         }
     }
 
