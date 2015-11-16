@@ -210,9 +210,10 @@ public class AirlineDBController {
                     search.getDst(), search.getDepdate());
         }
 
+
         ResultSet results = airlineDB.executeQuery(userSearchQuery);
         if (Debugging.isEnabled()) {
-            System.out.println(results);
+            System.out.println(userSearchQuery);
         }
         try {
             while (results.next()) {
