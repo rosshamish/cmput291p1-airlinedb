@@ -58,7 +58,7 @@ public class AirlineDB {
         try {
             Statement stmt = connection.createStatement(
                     ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.CONCUR_READ_ONLY);
             resultSet = stmt.executeQuery(query);
         } catch (SQLException e) {
             if (Debugging.isEnabled()) {
@@ -76,7 +76,7 @@ public class AirlineDB {
         try {
             Statement stmt = connection.createStatement(
                     ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
+                    ResultSet.CONCUR_READ_ONLY);
             stmt.executeUpdate(update);
         } catch (SQLException e) {
             if (Debugging.isEnabled()) {
