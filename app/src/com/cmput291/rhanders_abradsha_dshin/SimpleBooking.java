@@ -62,7 +62,7 @@ public class SimpleBooking {
     }
 
     public String descriptiveToString() {
-        return this.toString() + String.format("%10s|%4s|%4s|%30s|," +
+        return this.toString() + String.format("%10s|%4s|%4s|%30s|",
                 flightNo, fare, seat, email);
     }
 }
