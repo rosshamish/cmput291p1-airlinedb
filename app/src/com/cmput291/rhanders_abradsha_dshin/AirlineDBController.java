@@ -218,7 +218,7 @@ public class AirlineDBController {
         try {
             while (results.next()) {
                 if (Debugging.isEnabled()) {
-                    System.out.println(new SearchResults(results));
+                    System.out.println("search result: " + new SearchResults(results));
                 }
                 flightsList.add(new SearchResults(results));
             }
