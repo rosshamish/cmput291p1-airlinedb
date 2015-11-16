@@ -202,6 +202,10 @@ public class AirlineDBController {
             userSearchQuery = SQLQueries.selectConFlightsWith(search.getSrc(),
                     search.getDst(), search.getDepdate());
         } else {
+            if (Debugging.isEnabled()) {
+                System.out.println(String.format("\ngetSrc(): %s, getDst(): %s, getDepdate(): %s",
+                        search.getSrc(), search.getDst(), search.getDepdate()));
+            }
             userSearchQuery = SQLQueries.selectFlightsWith(search.getSrc(),
                     search.getDst(), search.getDepdate());
         }

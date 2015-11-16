@@ -5,6 +5,6 @@ package com.cmput291.rhanders_abradsha_dshin;
  */
 public class Debugging {
     public static Boolean isEnabled() {
-        return false;
+        return true;
     }
 }
