@@ -211,8 +211,14 @@ public class AirlineDBController {
         }
 
         ResultSet results = airlineDB.executeQuery(userSearchQuery);
+        if (Debugging.isEnabled()) {
+            System.out.println(results);
+        }
         try {
             while (results.next()) {
+                if (Debugging.isEnabled()) {
+                    System.out.println(new SearchResults(results));
+                }
                 flightsList.add(new SearchResults(results));
             }
         } catch (SQLException e) {
